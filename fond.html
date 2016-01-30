@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+    <style>
+        body {
+            background: white;
+        }
+    </style>
+</head>
+<title>Fonds de carte visionscarto</title>
+
+<body>
+
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <defs>
+            <style type="text/css">
+                .country {
+                    fill: white;
+                }
+                .coast {
+                    fill: none;
+                    stroke: #555;
+                    stroke-width: 0.2mm;
+                    stroke-linecap: round;
+                }
+                .border {
+                    fill: none;
+                    stroke: #555;
+                    stroke-width: 0.15mm;
+                    stroke-linecap: round;
+                }
+                .continents {
+                    fill: #eee;
+                }
+                #frame {
+                    fill: none;
+                    stroke: #444;
+                    stroke-width: 0.2mm;
+                    stroke-linecap: round;
+                }
+            </style>
+        </defs>
+    </svg>
+
+    <script src="./lib/d3.v3.min.js"></script>
+    <script src="./lib/d3.geo.projection.v0.min.js"></script>
+    <script src="./lib/topojson.v1.min.js"></script>
+    <script src="./lib/d3.geo.projection.visionscarto.js"></script>
+    <script>
+        var pj = window.location.href.match(/[?](.*&)*projection=([^&]*)/);
+        var topo = 'build/countries.topo.json',
+            projection = null,
+            laius_projection = '';
+
+        if (pj) {
+            pj = pj[2];
+        }
+         else {
+            pj = 'robinson';
+        }
+
+
+
+        switch (pj) {
+            case 'bertin1953':
+                topo = 'build/bertin1953.topo.json';
+                projection = null;
+                laius_projection = 'Projection et fond de carte créés par Philippe Rivière, d’après Jacques Bertin (1953).';
+                break;
+            case 'robinson':
+                projection = d3.geo.robinson().translate([324,245]).scale(128).rotate([-10.2]);
+                laius_projection = 'Fond de carte créé par Philippe Rivière ; projection Arthur H. Robinson (1963).';
+                break;
+            default:
+                if (pj in d3.geo) {
+                    projection = d3.geo[pj]();
+                    laius_projection = 'Carte créée par Philippe Rivière ; projection ' + pj;
+                } else {
+                    alert('projection '+pj+' inconnue');
+                    projection = null;
+                }
+                break;
+        }
+
+
+        var width = 700,
+            height = 475;
+
+        var path = d3.geo.path()
+            .projection(projection);
+
+        var svg = d3.select("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .attr('id', 'base map');
+
+        graphsignature(['Visionscarto', '2016'], [laius_projection, 'Gratuit et libre pour tous usages. Nous aimons les cartes, partageons-les !  contact@visionscarto.net']);
+
+
+        var world = svg.append('g')
+            .attr('id', 'world');
+
+        d3.json(topo, function (error, json) {
+            if (error) throw error;
+
+            var countries = json.objects.countries;
+            countries.geometries = countries.geometries
+                .filter(function (d) {
+                    return ['ATA', 'ATF'].indexOf(d.properties.iso_a3) < 0;
+                })
+                .sort(function (a, b) {
+                    return d3.descending(
+                        a.properties.name_sort,
+                        b.properties.name_sort
+                    );
+                });
+
+            world.append('path')
+                .attr('class', 'continents')
+                .attr('id', 'continents')
+                .datum(topojson.merge(json, countries.geometries))
+                .attr("d", path);
+
+
+            world.append('g')
+                .attr('id', 'countries')
+                .selectAll('.country')
+                .data(topojson.feature(json, countries).features)
+                .enter()
+                .append('path')
+                .attr('class', function (d) {
+                    return 'country ' +  class_iso_a3(d.properties);
+                })
+                .attr("d", path)
+                .attr('id', function (d) {
+                    return class_iso_a3(d.properties) + ' ' + d.properties.name;
+                });
+
+            world.append('path')
+                .datum(topojson.mesh(json, countries, function (a, b) {
+                    return a !== b;
+                }))
+                .attr({
+                    class: 'border',
+                    id: 'borders',
+                    d: path
+                });
+            world.append('path')
+                .datum(topojson.mesh(json, countries, function (a, b) {
+                    return a == b;
+                }))
+                .attr({
+                    class: 'coast',
+                    id: 'coasts',
+                    d: path
+                });
+
+            // integer paths for a smaller file size
+            d3.selectAll('path')
+                .each(function () {
+                    this.setAttribute('d', this.getAttribute('d').replace(/([0-9]\.[0-9])[0-9]+/g, '$1'));
+                });
+        });
+
+
+        function class_iso_a3(prop) {
+            return (prop.iso_a3 != '-99')
+                ? prop.iso_a3
+                : prop.sov_a3;
+        }
+
+        function graphsignature(lignes, copyleft) {
+            var sig = svg
+                .append('g')
+                .attr('id', 'signature');
+
+            sig.append('rect')
+                .attr({
+                    id: 'frame',
+                    x: 2,
+                    y: 2,
+                    width: width - 8,
+                    height: height - 5,
+                });
+            var signature = sig.append('g').attr('id', lignes[0]);
+
+            signature
+                .selectAll('text')
+                .data(lignes)
+                .enter()
+                .append('text')
+                .attr("y", function (d, i) {
+                    return 14 * i;
+                })
+                .attr("fill", "black")
+                .attr("text-anchor", "middle")
+                .style("font-size", "8px")
+                .text(function (d) {
+                    return d.toUpperCase();
+                });
+
+            var bbox = signature[0][0].getBBox();
+            signature
+                .attr({
+                    transform: 'translate(' + [width - bbox.width / 2 - 14, height - bbox.height - 2] + ')',
+                });
+
+
+            signature
+                .selectAll('line')
+                .data(lignes.slice(1))
+                .enter()
+                .append('line')
+                .attr({
+                    x1: -bbox.width / 2,
+                    x2: bbox.width / 2,
+                    y1: function (d, i) {
+                        return 14 * i + 4;
+                    },
+                    y2: function (d, i) {
+                        return 14 * i + 4;
+                    }
+                })
+                .attr("stroke", "black");
+
+            if (copyleft) {
+                sig.append('g')
+                    .attr('id', copyleft[0])
+                    .selectAll('text')
+                    .data(copyleft)
+                    .enter()
+                    .append('text')
+                    .attr('x', 8)
+                    .attr("y", function (d, i) {
+                        return height - 20 + 9 * i;
+                    })
+                    .attr("fill", "black")
+                    .attr("text-anchor", "start")
+                    .style("font-size", "6px")
+                    .text(function (d) {
+                        return d;
+                    })
+
+            }
+
+        }
+    </script>
