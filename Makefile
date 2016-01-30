@@ -19,7 +19,7 @@ topo:
 	topojson --properties \
 	--id-property id \
 	--projection 'd3.geo.visionscarto().translate([285,360])' \
-	--simplify 0.5 -- data/countries.geojson > build/bertin1953.topo.json
+	--simplify 0.7 -- data/countries.geojson > build/bertin1953.topo.json
 
 
 
@@ -39,8 +39,13 @@ robinson-png:
 
 
 ### OPTIM
-optim:
+optim: optim-png optim-svg
+
+optim-png:
 	imageOptim -a -d build/
+
+optim-svg:
+	svgo --precision=2 --disable=removeUnknownsAndDefaults build/
 
 
 

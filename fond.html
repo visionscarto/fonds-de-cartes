@@ -156,11 +156,6 @@
                     d: path
                 });
 
-            // integer paths for a smaller file size
-            d3.selectAll('path')
-                .each(function () {
-                    this.setAttribute('d', this.getAttribute('d').replace(/([0-9]\.[0-9])[0-9]+/g, '$1'));
-                });
         });
 
 
