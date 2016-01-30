@@ -70,7 +70,11 @@
                 break;
             case 'robinson':
                 projection = d3.geo.robinson().translate([324,245]).scale(128).rotate([-10.2]);
-                laius_projection = 'Fond de carte créé par Philippe Rivière ; projection Arthur H. Robinson (1963).';
+                laius_projection = 'Fond de carte créé par Philippe Rivière sur une projection d’Arthur H. Robinson (1963).';
+                break;
+            case 'larrivee':
+                projection = d3.geo.larrivee().translate([340,255]).scale(121).rotate([-10.2]);
+                laius_projection = 'Fond de carte créé par Philippe Rivière sur une projection de Léo Larrivée (1988).';
                 break;
             default:
                 if (pj in d3.geo) {
