@@ -47,6 +47,7 @@
     <script src="./lib/d3.geo.projection.v0.min.js"></script>
     <script src="./lib/topojson.v1.min.js"></script>
     <script src="./lib/d3.geo.projection.visionscarto.js"></script>
+    <script src="./lib/polyhedron.js"></script>
     <script>
         var pj = window.location.href.match(/[?](.*&)*projection=([^&]*)/);
         var topo = 'build/countries.topo.json',
@@ -75,6 +76,14 @@
             case 'larrivee':
                 projection = d3.geo.larrivee().translate([340,255]).scale(121).rotate([-10.2]);
                 laius_projection = 'Fond de carte créé par Philippe Rivière sur une projection de Léo Larrivée (1988).';
+                break;
+            case 'waterman':
+                projection = d3.geo.polyhedron.waterman()
+                .rotate([25, -2])
+                .scale(118)
+                .translate([200,200])
+                .precision(.1);
+                laius_projection = 'Fond de carte créé par Philippe Rivière sur une projection de Waterman.';
                 break;
             default:
                 if (pj in d3.geo) {
