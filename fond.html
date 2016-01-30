@@ -49,19 +49,20 @@
     <script src="./lib/d3.geo.projection.visionscarto.js"></script>
     <script src="./lib/polyhedron.js"></script>
     <script>
-        var pj = window.location.href.match(/[?](.*&)*projection=([^&]*)/);
+        function param(x, def) {
+            var re = new RegExp('[?](.*&)*' + x + '=([^&]*)'),
+                m = window.location.href.match(re);
+            if (m) {
+                return m[2];
+            }
+            return def;
+        }
+
         var topo = 'build/countries.topo.json',
             projection = null,
-            laius_projection = '';
-
-        if (pj) {
-            pj = pj[2];
-        }
-         else {
-            pj = 'robinson';
-        }
-
-
+            laius_projection = '',
+            pj = param('projection', 'robinson'),
+            rotate = param('rotate', null);
 
         switch (pj) {
             case 'bertin1953':
@@ -96,6 +97,9 @@
                 break;
         }
 
+        if (rotate) {
+            projection.rotate([parseFloat(rotate)]);
+        }
 
         var width = 700,
             height = 475;
