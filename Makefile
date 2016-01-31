@@ -1,6 +1,6 @@
 all: data fonds
 
-fonds: bertin1953 robinson larrivee optim
+fonds: bertin1953 robinson larrivee bottomley optim
 
 data: init topo
 
@@ -23,20 +23,23 @@ topo:
 ### PROJECTIONS
 
 bertin1953:
-	./bin/screenshot.js http://localhost/maps/fonds-de-cartes/fond.html?projection=bertin1953 build/visionscarto-bertin1953
+	./bin/screenshot.js file://`pwd`/fond.html?projection=bertin1953 build/visionscarto-bertin1953 2
 
 robinson:
-	./bin/screenshot.js http://localhost/maps/fonds-de-cartes/fond.html?projection=robinson build/visionscarto-robinson
+	./bin/screenshot.js file://`pwd`/fond.html?projection=robinson build/visionscarto-robinson 2
 
 larrivee:
-	./bin/screenshot.js http://localhost/maps/fonds-de-cartes/fond.html?projection=larrivee build/visionscarto-larrivee
+	./bin/screenshot.js file://`pwd`/fond.html?projection=larrivee build/visionscarto-larrivee 2
+
+bottomley:
+	./bin/screenshot.js file://`pwd`/fond.html?projection=bottomley build/visionscarto-bottomley 2
 
 
 ### OPTIM
 optim: optim-png optim-svg
 
 optim-png:
-	imageOptim -a -d build/
+	imageOptim --image-alpha --directory build/
 
 optim-svg:
 	svgo --precision=2 --disable=removeUnknownsAndDefaults build/

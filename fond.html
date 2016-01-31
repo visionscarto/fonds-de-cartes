@@ -72,11 +72,15 @@
                 break;
             case 'robinson':
                 projection = d3.geo.robinson().translate([324,245]).scale(128).rotate([-10.2]);
-                laius_projection = 'Fond de carte créé par Philippe Rivière sur une projection d’Arthur H. Robinson (1963).';
+                laius_projection = 'Fond de carte réalisé par Philippe Rivière sur une projection d’Arthur H. Robinson (1963).';
                 break;
             case 'larrivee':
                 projection = d3.geo.larrivee().translate([340,255]).scale(121).rotate([-10.2]);
-                laius_projection = 'Fond de carte créé par Philippe Rivière sur une projection de Léo Larrivée (1988).';
+                laius_projection = 'Fond de carte réalisé par Philippe Rivière sur une projection de Léo Larrivée (1988).';
+                break;
+            case 'bottomley':
+                projection = d3.geo.bottomley().translate([287,265]).scale(152).rotate([-10.23]);
+                laius_projection = 'Fond de carte réalisé par Philippe Rivière sur une projection de Henry Bottomley (2003).';
                 break;
             case 'waterman':
                 projection = d3.geo.polyhedron.waterman()
@@ -84,12 +88,12 @@
                 .scale(118)
                 .translate([200,200])
                 .precision(.1);
-                laius_projection = 'Fond de carte créé par Philippe Rivière sur une projection de Waterman.';
+                laius_projection = 'Fond de carte réalisé par Philippe Rivière sur une projection de Waterman.';
                 break;
             default:
                 if (pj in d3.geo) {
                     projection = d3.geo[pj]();
-                    laius_projection = 'Carte créée par Philippe Rivière ; projection ' + pj;
+                    laius_projection = 'Fond de carte réalisé par Philippe Rivière ; projection ' + pj;
                 } else {
                     alert('projection '+pj+' inconnue');
                     projection = null;
