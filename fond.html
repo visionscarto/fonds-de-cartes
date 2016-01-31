@@ -71,19 +71,31 @@
                 laius_projection = 'Projection et fond de carte créés par Philippe Rivière, d’après Jacques Bertin (1953).';
                 break;
             case 'robinson':
-                projection = d3.geo.robinson().translate([324,245]).scale(128).rotate([-10.2]);
+                projection = d3.geo.robinson()
+                    .translate([324,245])
+                    .scale(128)
+                    .rotate([-10.23]);
                 laius_projection = 'Projection d’Arthur H. Robinson (1963).';
                 break;
             case 'larrivee':
-                projection = d3.geo.larrivee().translate([340,255]).scale(121).rotate([-10.2]);
+                projection = d3.geo.larrivee()
+                    .translate([340,255])
+                    .scale(121)
+                    .rotate([-10.23]);
                 laius_projection = 'Projection de Léo Larrivée (1988).';
                 break;
             case 'bottomley':
-                projection = d3.geo.bottomley().translate([287,265]).scale(152).rotate([-10.23]);
+                projection = d3.geo.bottomley()
+                    .translate([287,265])
+                    .scale(152)
+                    .rotate([-10.23]);
                 laius_projection = 'Projection d’Henry Bottomley (2003).';
                 break;
             case 'winkel3':
-                projection = d3.geo.winkel3().translate([314,265]).scale(160).rotate([-10.23]);
+                projection = d3.geo.winkel3()
+                    .translate([314,265])
+                    .scale(160)
+                    .rotate([-10.23]);
                 laius_projection = 'Projection d’Oswald Winkel, dite Winkel-Tripel (1921).';
                 break;
             case 'waterman':

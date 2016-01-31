@@ -12,10 +12,13 @@
 
 ### Projections
 
-- [Robinson](http://bl.ocks.org/mbostock/3710566)
-- [Larrivée](http://bl.ocks.org/mbostock/3719042)
 - [Visionscarto inspirée de Bertin 1953](http://visionscarto.net/)
+- [Bottomley](http://visionscarto.net/la-projection-bottomley)
+- [Larrivée](http://bl.ocks.org/mbostock/3719042)
+- [Robinson](http://bl.ocks.org/mbostock/3710566)
+- [Winkel-Tripel](http://bl.ocks.org/mbostock/3682676)
 
+(Toutes les projections sont faites avec une rotation de 10,2° de manière à faire passer la ligne de césure dans le détroit de Bering.)
 
 ### Logiciels
 
