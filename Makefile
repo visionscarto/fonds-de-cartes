@@ -1,6 +1,6 @@
 all: data fonds
 
-fonds: bertin1953 robinson larrivee bottomley optim
+fonds: bertin1953 robinson larrivee bottomley winkel3 optim
 
 data: init topo
 
@@ -33,6 +33,9 @@ larrivee:
 
 bottomley:
 	./bin/screenshot.js file://`pwd`/fond.html?projection=bottomley build/visionscarto-bottomley 2
+
+winkel3:
+	./bin/screenshot.js file://`pwd`/fond.html?projection=winkel3 build/visionscarto-winkel3 2
 
 
 ### OPTIM
