@@ -2,10 +2,6 @@ all: data fonds
 
 fonds: bertin1953 robinson larrivee optim
 
-bertin1953: bertin1953-svg bertin1953-png
-robinson: robinson-svg robinson-png
-larrivee: larrivee-svg larrivee-png
-
 data: init topo
 
 
@@ -24,26 +20,16 @@ topo:
 
 
 
-### BERTIN
-bertin1953-svg:
-	./screenshot.js http://localhost/maps/fonds-de-cartes/fond.html?projection=bertin1953 build/visionscarto-bertin1953.svg
+### PROJECTIONS
 
-bertin1953-png:
-	./screenshot.js http://localhost/maps/fonds-de-cartes/fond.html?projection=bertin1953 build/visionscarto-bertin1953.png 2
+bertin1953:
+	./bin/screenshot.js http://localhost/maps/fonds-de-cartes/fond.html?projection=bertin1953 build/visionscarto-bertin1953
 
-### ROBINSON
-robinson-svg:
-	./screenshot.js http://localhost/maps/fonds-de-cartes/fond.html?projection=robinson build/visionscarto-robinson.svg
+robinson:
+	./bin/screenshot.js http://localhost/maps/fonds-de-cartes/fond.html?projection=robinson build/visionscarto-robinson
 
-robinson-png:
-	./screenshot.js http://localhost/maps/fonds-de-cartes/fond.html?projection=robinson build/visionscarto-robinson.png 2
-
-### LARRIVEE
-larrivee-svg:
-	./screenshot.js http://localhost/maps/fonds-de-cartes/fond.html?projection=larrivee build/visionscarto-larrivee.svg
-
-larrivee-png:
-	./screenshot.js http://localhost/maps/fonds-de-cartes/fond.html?projection=larrivee build/visionscarto-larrivee.png 2
+larrivee:
+	./bin/screenshot.js http://localhost/maps/fonds-de-cartes/fond.html?projection=larrivee build/visionscarto-larrivee
 
 
 ### OPTIM
@@ -54,6 +40,4 @@ optim-png:
 
 optim-svg:
 	svgo --precision=2 --disable=removeUnknownsAndDefaults build/
-
-
 

@@ -35,16 +35,15 @@ page.open(url,
         // attendre 1seconde pour d3.legend()
         console.log('sleeping for ' + secs + 's');
         setTimeout(function () {
+            console.log('saving ' + url + ' at scale ' + scale + ' as ' + dest);
+
             var a = page.evaluate(function() {
               return document.all[0].outerHTML.match(/<svg[^]*?<\/svg>/gm)[0];
             });
+            saveas('<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">' + a, dest + '.svg');
 
-            console.log('saving ' + url + ' at scale ' + scale + ' as ' + dest);
-            if (dest.match(/\.svg$/)) {
-                saveas('<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">' + a, dest);
-            } else {
-                page.render(dest);
-            }
+            page.render(dest + '.png');
+
             phantom.exit();
         }, secs * 1000);
 
