@@ -42,7 +42,7 @@ page.open(url,
             var a = page.evaluate(function() {
               return document.all[0].outerHTML.match(/<svg[^]*?<\/svg>/gm)[0];
             });
-            saveas('<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">' + a, dest + '.svg');
+            saveas('<?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">' + a, dest + '.svg');
 
             phantom.exit();
         }, secs * 1000);
