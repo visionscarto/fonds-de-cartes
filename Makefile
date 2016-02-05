@@ -1,6 +1,8 @@
 all: data fonds
 
-fonds: bertin1953 robinson larrivee bottomley winkel3 optim
+fonds: bertin1953 robinson winkel3 optim
+
+fonds-bizarres: larrivee bottomley
 
 data: init topo
 
