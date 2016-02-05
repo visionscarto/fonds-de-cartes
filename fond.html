@@ -68,7 +68,7 @@
             case 'bertin1953':
                 topo = 'build/bertin1953.topo.json';
                 projection = null;
-                laius_projection = 'Projection et fond de carte créés par Philippe Rivière, d’après Jacques Bertin (1953).';
+                laius_projection = 'Projection créée par Philippe Rivière d’après Jacques Bertin (1953).';
                 break;
             case 'robinson':
                 projection = d3.geo.robinson()
@@ -109,13 +109,19 @@
             default:
                 if (pj in d3.geo) {
                     projection = d3.geo[pj]();
-                    laius_projection = 'Projection : ' + pj;
+                    laius_projection = 'Projection : ' + pj + '.';
                 } else {
                     alert('projection '+pj+' inconnue');
                     projection = null;
                 }
                 break;
         }
+
+        var laius = [
+          laius_projection,
+          'Contours : Natural Earth, modifiés Visionscarto. Logiciel : D3.js',
+          'Gratuit et libre pour tous usages. Nous aimons les cartes, partageons-les !  contact@visionscarto.net'
+        ];
 
         if (rotate) {
             projection.rotate([parseFloat(rotate)]);
@@ -132,7 +138,7 @@
             .attr("height", height)
             .attr('id', 'base map');
 
-        graphsignature(['Visionscarto', '2016'], [laius_projection, 'Gratuit et libre pour tous usages. Nous aimons les cartes, partageons-les !  contact@visionscarto.net']);
+        graphsignature(['Visionscarto', '2016'], laius);
 
 
         var world = svg.append('g')
@@ -202,7 +208,7 @@
                 : prop.sov_a3;
         }
 
-        function graphsignature(lignes, copyleft) {
+        function graphsignature(lignes, laius) {
             var sig = svg
                 .append('g')
                 .attr('id', 'signature');
@@ -256,16 +262,15 @@
                 })
                 .attr("stroke", "black");
 
-            if (copyleft) {
-                sig.append('g')
-                    .attr('id', copyleft[0])
-                    .selectAll('text')
-                    .data(copyleft)
+            if (laius) {
+                signature = sig.append('g')
+                    .attr('id', laius[0]);
+                signature.selectAll('text')
+                    .data(laius)
                     .enter()
                     .append('text')
-                    .attr('x', 8)
                     .attr("y", function (d, i) {
-                        return height - 20 + 9 * i;
+                        return 9 * i;
                     })
                     .attr("fill", "black")
                     .attr("text-anchor", "start")
@@ -273,6 +278,12 @@
                     .text(function (d) {
                         return d;
                     })
+
+            var bbox = signature[0][0].getBBox();
+            signature
+                .attr({
+                    transform: 'translate(' + [ 12, height - bbox.height - 4] + ')',
+                });
 
             }
 
