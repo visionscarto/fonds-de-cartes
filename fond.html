@@ -174,7 +174,8 @@
             .defer(d3.json, topo)
             .defer(d3.csv, './data/capitals.csv')
             .defer(d3.csv, './data/island-nations.csv')
-            .await(function (error, wjson, capitals, islands) {
+            .defer(d3.json, '../some-geo-data/population-centroids.geojson')
+            .await(function (error, wjson, capitals, islands, pop) {
 
                 if (error) throw error;
 
@@ -308,41 +309,47 @@
 
 
                 // POPULATION
+                var data = pop
+                        .features
+                        .map(function(d) {
+console.log(d);
+                            d.xy = projection(d.geometry.coordinates)
+                            d.pop = parseInt(d.properties.POP_EST);  // GDP_MD_EST
+                            return d;
+                        })
+                        .filter(function(d) {
+                            return d.pop > 0;
+                        })
+                        .sort(function (a, b) {
+                            return d3.descending(a.pop, b.pop);
+                        })
+
                 var population_scale = d3.scale.sqrt()
-                .domain([0, 1e9])
+                .domain([0, d3.max(data, function(d) { return d.pop; })])
                 .range([1, 23]);
 
                 world.append('g')
                     .attr('id', 'population')
                     .selectAll('circle')
-                    .data(
-                        topojson.feature(wjson, countries).features
-                        .map(function (d) {
-                            d.centroid = topopath.centroid(d);
-                            return d;
-                        })
-                        .sort(function (a, b) {
-                            return d3.descending(a.properties.pop_est, b.properties.pop_est);
-                        })
-                )
+                    .data(data)
                     .enter()
                     .append('circle')
                     .attr('class', function (d) {
-                        return 'population ' + class_iso_a3(d.properties);
+                        return 'population ' + (d.properties.ISO_A3);
                     })
                     .attr({
                         cx: function (d) {
-                            return d.centroid[0];
+                            return d.xy[0];
                         },
                         cy: function (d) {
-                            return d.centroid[1];
+                            return d.xy[1];
                         },
                         r: function (d) {
-                            return population_scale(d.properties.pop_est);
+                            return population_scale(d.pop);
                         },
                     })
                     .attr('id', function (d) {
-                        return class_iso_a3(d.properties) + ' ' + d.properties.name;
+                        return d.properties.ISO_A3 + ' ' + d.properties.NAME;
                     });
 
             });
