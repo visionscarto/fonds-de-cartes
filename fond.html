@@ -72,56 +72,56 @@
             rotate = param('rotate', null);
 
         switch (pj) {
-            case 'bertin1953':
-                projection = d3.geo.visionscarto()
-                    .translate([285,360]);
-                laius_projection = 'Projection créée par Philippe Rivière d’après Jacques Bertin (1953).';
-                break;
-            case 'robinson':
-                projection = d3.geo.robinson()
-                    .translate([324,245])
-                    .scale(128)
-                    .rotate([-10.23]);
-                laius_projection = 'Projection d’Arthur H. Robinson (1963).';
-                break;
-            case 'larrivee':
-                projection = d3.geo.larrivee()
-                    .translate([340,255])
-                    .scale(121)
-                    .rotate([-10.23]);
-                laius_projection = 'Projection de Léo Larrivée (1988).';
-                break;
-            case 'bottomley':
-                projection = d3.geo.bottomley()
-                    .translate([287,265])
-                    .scale(152)
-                    .rotate([-10.23]);
-                laius_projection = 'Projection d’Henry Bottomley (2003).';
-                break;
-            case 'winkel3':
-                projection = d3.geo.winkel3()
-                    .translate([314,265])
-                    .scale(160)
-                    .rotate([-10.23]);
-                laius_projection = 'Projection d’Oswald Winkel, dite Winkel-Tripel (1921).';
-                break;
-            case 'waterman':
-                projection = d3.geo.polyhedron.waterman()
+        case 'bertin1953':
+            projection = d3.geo.visionscarto()
+                .translate([285, 360]);
+            laius_projection = 'Projection créée par Philippe Rivière d’après Jacques Bertin (1953).';
+            break;
+        case 'robinson':
+            projection = d3.geo.robinson()
+                .translate([324, 245])
+                .scale(128)
+                .rotate([-10.23]);
+            laius_projection = 'Projection d’Arthur H. Robinson (1963).';
+            break;
+        case 'larrivee':
+            projection = d3.geo.larrivee()
+                .translate([340, 255])
+                .scale(121)
+                .rotate([-10.23]);
+            laius_projection = 'Projection de Léo Larrivée (1988).';
+            break;
+        case 'bottomley':
+            projection = d3.geo.bottomley()
+                .translate([287, 265])
+                .scale(152)
+                .rotate([-10.23]);
+            laius_projection = 'Projection d’Henry Bottomley (2003).';
+            break;
+        case 'winkel3':
+            projection = d3.geo.winkel3()
+                .translate([314, 265])
+                .scale(160)
+                .rotate([-10.23]);
+            laius_projection = 'Projection d’Oswald Winkel, dite Winkel-Tripel (1921).';
+            break;
+        case 'waterman':
+            projection = d3.geo.polyhedron.waterman()
                 .rotate([25, -2])
                 .scale(118)
-                .translate([200,200])
+                .translate([200, 200])
                 .precision(.1);
-                laius_projection = 'Projection de Waterman.';
-                break;
-            default:
-                if (pj in d3.geo) {
-                    projection = d3.geo[pj]();
-                    laius_projection = 'Projection : ' + pj + '.';
-                } else {
-                    alert('projection '+pj+' inconnue');
-                    projection = null;
-                }
-                break;
+            laius_projection = 'Projection de Waterman.';
+            break;
+        default:
+            if (pj in d3.geo) {
+                projection = d3.geo[pj]();
+                laius_projection = 'Projection : ' + pj + '.';
+            } else {
+                alert('projection ' + pj + ' inconnue');
+                projection = null;
+            }
+            break;
         }
 
 
@@ -135,7 +135,7 @@
             projection.rotate([parseFloat(rotate)]);
         }
 
-        // pour bertin1953 on utilise le topojson special
+         // pour bertin1953 on utilise le topojson special
         if (pj === 'bertin1953') {
             topo = 'build/bertin1953.topo.json';
             topoproj = null;
@@ -163,100 +163,104 @@
             .attr('id', 'world');
 
         queue()
-        .defer(d3.json, topo)
-        .defer(d3.csv, './data/capitals.csv')
-        .await(function (error, wjson, capitals) {
+            .defer(d3.json, topo)
+            .defer(d3.csv, './data/capitals.csv')
+            .await(function (error, wjson, capitals) {
 
-            if (error) throw error;
+                if (error) throw error;
 
-            var countries = wjson.objects.countries;
-            countries.geometries = countries.geometries
-                .filter(function (d) {
-                    return ['ATA', 'ATF'].indexOf(d.properties.iso_a3) < 0;
-                })
-                .sort(function (a, b) {
-                    return d3.descending(
-                        a.properties.name_sort,
-                        b.properties.name_sort
-                    );
-                });
+                var countries = wjson.objects.countries;
+                countries.geometries = countries.geometries
+                    .filter(function (d) {
+                        return ['ATA', 'ATF'].indexOf(d.properties.iso_a3) < 0;
+                    })
+                    .sort(function (a, b) {
+                        return d3.descending(
+                            a.properties.name_sort,
+                            b.properties.name_sort
+                        );
+                    });
 
-            world.append('path')
-                .attr('class', 'continents')
-                .attr('id', 'continents')
-                .datum(topojson.merge(wjson, countries.geometries))
-                .attr("d", topopath);
+                world.append('path')
+                    .attr('class', 'continents')
+                    .attr('id', 'continents')
+                    .datum(topojson.merge(wjson, countries.geometries))
+                    .attr("d", topopath);
 
 
-            world.append('g')
-                .attr('id', 'countries')
-                .selectAll('.country')
-                .data(topojson.feature(wjson, countries).features)
-                .enter()
-                .append('path')
-                .attr('class', function (d) {
-                    return 'country ' +  class_iso_a3(d.properties);
-                })
-                .attr("d", topopath)
-                .attr('id', function (d) {
-                    return class_iso_a3(d.properties) + ' ' + d.properties.name;
-                });
+                world.append('g')
+                    .attr('id', 'countries')
+                    .selectAll('.country')
+                    .data(topojson.feature(wjson, countries).features)
+                    .enter()
+                    .append('path')
+                    .attr('class', function (d) {
+                        return 'country ' + class_iso_a3(d.properties);
+                    })
+                    .attr("d", topopath)
+                    .attr('id', function (d) {
+                        return class_iso_a3(d.properties) + ' ' + d.properties.name;
+                    });
 
-            world.append('path')
-                .datum(topojson.mesh(wjson, countries, function (a, b) {
-                    return a !== b;
-                }))
-                .attr({
-                    class: 'border',
-                    id: 'borders',
-                    d: topopath
-                });
-            world.append('path')
-                .datum(topojson.mesh(wjson, countries, function (a, b) {
-                    return a == b;
-                }))
-                .attr({
-                    class: 'coast',
-                    id: 'coasts',
-                    d: topopath
-                });
+                world.append('path')
+                    .datum(topojson.mesh(wjson, countries, function (a, b) {
+                        return a !== b;
+                    }))
+                    .attr({
+                        class: 'border',
+                        id: 'borders',
+                        d: topopath
+                    });
+                world.append('path')
+                    .datum(topojson.mesh(wjson, countries, function (a, b) {
+                        return a == b;
+                    }))
+                    .attr({
+                        class: 'coast',
+                        id: 'coasts',
+                        d: topopath
+                    });
 
-            var cap = world.append('g')
-                .attr({
-                    id: 'capitals',
-                });
-            
-            cap.selectAll('circle')
-                .data(
-                  capitals.map(function(d) {
-                    var p = projection([parseFloat(d.lon), parseFloat(d.lat)]);
-                    if (p) {
-                        d.x = p[0];
-                        d.y = p[1];
-                    }
-                    return d;
-                  })
-                  .sort(function(a,b) {
-                    return d3.descending(a.id, b.id);
-                  })
+                var cap = world.append('g')
+                    .attr({
+                        id: 'capitals',
+                    });
+
+                cap.selectAll('circle')
+                    .data(
+                        capitals.map(function (d) {
+                            var p = projection([parseFloat(d.lon), parseFloat(d.lat)]);
+                            if (p) {
+                                d.x = p[0];
+                                d.y = p[1];
+                            }
+                            return d;
+                        })
+                        .sort(function (a, b) {
+                            return d3.descending(a.id, b.id);
+                        })
                 )
-                .enter()
-                .append('circle')
-                .attr({
-                    id: function(d) { return d.id + ' ' + d.capital; },
-                    cx: function(d) { return d.x; },
-                    cy: function(d) { return d.y; },
-                    class: 'capital',
-                    r: '0.4mm',
-                });
+                    .enter()
+                    .append('circle')
+                    .attr({
+                        id: function (d) {
+                            return d.id + ' ' + d.capital;
+                        },
+                        cx: function (d) {
+                            return d.x;
+                        },
+                        cy: function (d) {
+                            return d.y;
+                        },
+                        class: 'capital',
+                        r: '0.4mm',
+                    });
 
-        });
+            });
 
 
         function class_iso_a3(prop) {
-            return (prop.iso_a3 != '-99')
-                ? prop.iso_a3
-                : prop.sov_a3;
+            return (prop.iso_a3 != '-99') ? prop.iso_a3 : prop.sov_a3;
         }
 
         function graphsignature(lignes, laius) {
@@ -330,11 +334,11 @@
                         return d;
                     })
 
-            var bbox = signature[0][0].getBBox();
-            signature
-                .attr({
-                    transform: 'translate(' + [ 12, height - bbox.height - 4] + ')',
-                });
+                var bbox = signature[0][0].getBBox();
+                signature
+                    .attr({
+                        transform: 'translate(' + [12, height - bbox.height - 4] + ')',
+                    });
 
             }
 
