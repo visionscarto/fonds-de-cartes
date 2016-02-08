@@ -18,7 +18,7 @@ topo:
 	topojson --properties \
 	--id-property id \
 	--projection 'd3.geo.visionscarto().translate([285,360])' \
-	--simplify 0.7 -- data/countries.geojson > build/bertin1953.topo.json
+	-- data/countries.geojson > build/bertin1953.topo.json
 
 
 
