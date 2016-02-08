@@ -46,6 +46,7 @@
     <script src="./lib/d3.v3.min.js"></script>
     <script src="./lib/d3.geo.projection.v0.min.js"></script>
     <script src="./lib/topojson.v1.min.js"></script>
+    <script src="./lib/queue.v1.min.js"></script>
     <script src="./lib/d3.geo.projection.visionscarto.js"></script>
     <script src="./lib/polyhedron.js"></script>
     <script>
@@ -144,10 +145,13 @@
         var world = svg.append('g')
             .attr('id', 'world');
 
-        d3.json(topo, function (error, json) {
+        queue()
+        .defer(d3.json, topo)
+        .await(function (error, wjson) {
+
             if (error) throw error;
 
-            var countries = json.objects.countries;
+            var countries = wjson.objects.countries;
             countries.geometries = countries.geometries
                 .filter(function (d) {
                     return ['ATA', 'ATF'].indexOf(d.properties.iso_a3) < 0;
@@ -162,14 +166,14 @@
             world.append('path')
                 .attr('class', 'continents')
                 .attr('id', 'continents')
-                .datum(topojson.merge(json, countries.geometries))
+                .datum(topojson.merge(wjson, countries.geometries))
                 .attr("d", path);
 
 
             world.append('g')
                 .attr('id', 'countries')
                 .selectAll('.country')
-                .data(topojson.feature(json, countries).features)
+                .data(topojson.feature(wjson, countries).features)
                 .enter()
                 .append('path')
                 .attr('class', function (d) {
@@ -181,7 +185,7 @@
                 });
 
             world.append('path')
-                .datum(topojson.mesh(json, countries, function (a, b) {
+                .datum(topojson.mesh(wjson, countries, function (a, b) {
                     return a !== b;
                 }))
                 .attr({
@@ -190,7 +194,7 @@
                     d: path
                 });
             world.append('path')
-                .datum(topojson.mesh(json, countries, function (a, b) {
+                .datum(topojson.mesh(wjson, countries, function (a, b) {
                     return a == b;
                 }))
                 .attr({
