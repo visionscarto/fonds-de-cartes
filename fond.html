@@ -36,6 +36,11 @@
                 .capital {
                     fill: #b47a2c;
                 }
+                .country-island {
+                    stroke: #555;
+                    stroke-width: 0.2mm;
+                    fill: #b47a2c;
+                }
                 #frame {
                     fill: none;
                     stroke: #444;
@@ -162,7 +167,8 @@
         queue()
             .defer(d3.json, topo)
             .defer(d3.csv, './data/capitals.csv')
-            .await(function (error, wjson, capitals) {
+            .defer(d3.csv, './data/island-nations.csv')
+            .await(function (error, wjson, capitals, islands) {
 
                 if (error) throw error;
 
@@ -218,6 +224,46 @@
                         d: topopath
                     });
 
+                // ISLAND NATIONS
+                var isl = world.append('g')
+                    .attr({
+                        id: 'island nations',
+                    });
+
+                isl.selectAll('circle')
+                    .data(
+                        islands.map(function (d) {
+                            var p = projection([parseFloat(d.lon), parseFloat(d.lat)]);
+                            if (p) {
+                                d.x = p[0];
+                                d.y = p[1];
+                            }
+                            return d;
+                        })
+                        .sort(function (a, b) {
+                            return d3.descending(a.id, b.id);
+                        })
+                )
+                    .enter()
+                    .append('circle')
+                    .attr({
+                        id: function (d) {
+                            return d.id + ' ' + d.name;
+                        },
+                        cx: function (d) {
+                            return d.x;
+                        },
+                        cy: function (d) {
+                            return d.y;
+                        },
+                        class: function (d) {
+                            return d.id + ' ' + 'country-island';
+                        },
+                        r: '0.25mm',
+                    });
+
+
+                // CAPITALS
                 var cap = world.append('g')
                     .attr({
                         id: 'capitals',
