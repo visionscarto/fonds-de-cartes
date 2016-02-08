@@ -41,6 +41,12 @@
                     stroke-width: 0.2mm;
                     fill: #b47a2c;
                 }
+                .population {
+                    stroke: #fff;
+                    stroke-width: 0.14mm;
+                    fill: red;
+                    fill-opacity: 0.3;
+                }
                 #frame {
                     fill: none;
                     stroke: #444;
@@ -178,7 +184,7 @@
                         return ['ATA', 'ATF'].indexOf(d.properties.iso_a3) < 0;
                     })
                     .sort(function (a, b) {
-                        return d3.descending(
+                        return (
                             a.properties.name_sort,
                             b.properties.name_sort
                         );
@@ -223,6 +229,7 @@
                         id: 'coasts',
                         d: topopath
                     });
+
 
                 // ISLAND NATIONS
                 var isl = world.append('g')
@@ -297,6 +304,45 @@
                         },
                         class: 'capital',
                         r: '0.2mm',
+                    });
+
+
+                // POPULATION
+                var population_scale = d3.scale.sqrt()
+                .domain([0, 1e9])
+                .range([1, 23]);
+
+                world.append('g')
+                    .attr('id', 'population')
+                    .selectAll('circle')
+                    .data(
+                        topojson.feature(wjson, countries).features
+                        .map(function (d) {
+                            d.centroid = topopath.centroid(d);
+                            return d;
+                        })
+                        .sort(function (a, b) {
+                            return d3.descending(a.properties.pop_est, b.properties.pop_est);
+                        })
+                )
+                    .enter()
+                    .append('circle')
+                    .attr('class', function (d) {
+                        return 'population ' + class_iso_a3(d.properties);
+                    })
+                    .attr({
+                        cx: function (d) {
+                            return d.centroid[0];
+                        },
+                        cy: function (d) {
+                            return d.centroid[1];
+                        },
+                        r: function (d) {
+                            return population_scale(d.properties.pop_est);
+                        },
+                    })
+                    .attr('id', function (d) {
+                        return class_iso_a3(d.properties) + ' ' + d.properties.name;
                     });
 
             });
