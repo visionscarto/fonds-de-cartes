@@ -47,6 +47,12 @@
                     fill: red;
                     fill-opacity: 0.3;
                 }
+                .gdp {
+                    stroke: #fff;
+                    stroke-width: 0.14mm;
+                    fill: blue;
+                    fill-opacity: 0.3;
+                }
                 #frame {
                     fill: none;
                     stroke: #444;
@@ -312,19 +318,18 @@
                 var data = pop
                         .features
                         .map(function(d) {
-console.log(d);
                             d.xy = projection(d.geometry.coordinates)
-                            d.pop = parseInt(d.properties.POP_EST);  // GDP_MD_EST
+                            d.pop = parseFloat(d.properties.POP_EST);
                             return d;
                         })
                         .filter(function(d) {
-                            return d.pop > 0;
+                            return (d.properties.ISO_A3 !== -99) && d.pop > 0;
                         })
                         .sort(function (a, b) {
                             return d3.descending(a.pop, b.pop);
                         })
 
-                var population_scale = d3.scale.sqrt()
+                var pop_scale = d3.scale.sqrt()
                 .domain([0, d3.max(data, function(d) { return d.pop; })])
                 .range([1, 23]);
 
@@ -345,13 +350,63 @@ console.log(d);
                             return d.xy[1];
                         },
                         r: function (d) {
-                            return population_scale(d.pop);
+                            return pop_scale(d.pop);
                         },
                     })
                     .attr('id', function (d) {
                         return d.properties.ISO_A3 + ' ' + d.properties.NAME;
                     });
 
+
+                // GDP/PIB
+                var data = pop
+                        .features
+                        .map(function(d) {
+                            d.xy = projection(d.geometry.coordinates)
+                            d.gdp = parseFloat(d.properties.GDP_MD_EST);
+                            return d;
+                        })
+                        .filter(function(d) {
+                            return (d.properties.ISO_A3 !== -99) && d.gdp > 0;
+                        })
+                        .sort(function (a, b) {
+                            return d3.descending(a.gdp, b.gdp);
+                        })
+
+                var gdp_scale = d3.scale.sqrt()
+                .domain([0, d3.max(data, function(d) { return d.gdp; })])
+                .range([1, 23]);
+
+                world.append('g')
+                    .attr('id', 'gdp')
+                    .selectAll('rect')
+                    .data(data)
+                    .enter()
+                    .append('rect')
+                    .attr('class', function (d) {
+                        return 'gdp ' + (d.properties.ISO_A3);
+                    })
+                    .attr({
+                        x: function (d) {
+                            return d.xy[0];
+                        },
+                        y: function (d) {
+                            return d.xy[1];
+                        },
+                        width: function (d) {
+                            return gdp_scale(d.gdp);
+                        },
+                        height: function (d) {
+                            return gdp_scale(d.gdp);
+                        },
+                        transform: function(d) {
+                            var x = -gdp_scale(d.gdp)/2;
+                            return 'translate(' + x + ',' + x + ')';
+                        }
+                    })
+                    .attr('id', function (d) {
+                        return d.properties.ISO_A3 + ' ' + d.properties.NAME;
+                    });
             });
 
 
