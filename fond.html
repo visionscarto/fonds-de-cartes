@@ -33,6 +33,12 @@
                 .continents {
                     fill: #eee;
                 }
+                #capitals {
+                    display: none;
+                }
+                .capital {
+                    fill: #777;
+                }
                 #frame {
                     fill: none;
                     stroke: #444;
@@ -67,8 +73,8 @@
 
         switch (pj) {
             case 'bertin1953':
-                topo = 'build/bertin1953.topo.json';
-                projection = null;
+                projection = d3.geo.visionscarto()
+                    .translate([285,360]);
                 laius_projection = 'Projection créée par Philippe Rivière d’après Jacques Bertin (1953).';
                 break;
             case 'robinson':
@@ -118,6 +124,7 @@
                 break;
         }
 
+
         var laius = [
           laius_projection,
           'Contours : Natural Earth, modifiés Visionscarto. Logiciel : D3.js',
@@ -128,11 +135,21 @@
             projection.rotate([parseFloat(rotate)]);
         }
 
+        // pour bertin1953 on utilise le topojson special
+        if (pj === 'bertin1953') {
+            topo = 'build/bertin1953.topo.json';
+            topoproj = null;
+        } else {
+            topoproj = projection;
+        }
+
         var width = 700,
             height = 475;
 
         var path = d3.geo.path()
             .projection(projection);
+        var topopath = d3.geo.path()
+            .projection(topoproj);
 
         var svg = d3.select("svg")
             .attr("width", width)
@@ -147,7 +164,8 @@
 
         queue()
         .defer(d3.json, topo)
-        .await(function (error, wjson) {
+        .defer(d3.csv, './data/capitals.csv')
+        .await(function (error, wjson, capitals) {
 
             if (error) throw error;
 
@@ -167,7 +185,7 @@
                 .attr('class', 'continents')
                 .attr('id', 'continents')
                 .datum(topojson.merge(wjson, countries.geometries))
-                .attr("d", path);
+                .attr("d", topopath);
 
 
             world.append('g')
@@ -179,7 +197,7 @@
                 .attr('class', function (d) {
                     return 'country ' +  class_iso_a3(d.properties);
                 })
-                .attr("d", path)
+                .attr("d", topopath)
                 .attr('id', function (d) {
                     return class_iso_a3(d.properties) + ' ' + d.properties.name;
                 });
@@ -191,7 +209,7 @@
                 .attr({
                     class: 'border',
                     id: 'borders',
-                    d: path
+                    d: topopath
                 });
             world.append('path')
                 .datum(topojson.mesh(wjson, countries, function (a, b) {
@@ -200,7 +218,36 @@
                 .attr({
                     class: 'coast',
                     id: 'coasts',
-                    d: path
+                    d: topopath
+                });
+
+            var cap = world.append('g')
+                .attr({
+                    id: 'capitals',
+                });
+            
+            cap.selectAll('circle')
+                .data(
+                  capitals.map(function(d) {
+                    var p = projection([parseFloat(d.lon), parseFloat(d.lat)]);
+                    if (p) {
+                        d.x = p[0];
+                        d.y = p[1];
+                    }
+                    return d;
+                  })
+                  .sort(function(a,b) {
+                    return d3.descending(a.id, b.id);
+                  })
+                )
+                .enter()
+                .append('circle')
+                .attr({
+                    id: function(d) { return d.id + ' ' + d.capital; },
+                    cx: function(d) { return d.x; },
+                    cy: function(d) { return d.y; },
+                    class: 'capital',
+                    r: '0.4mm',
                 });
 
         });
