@@ -1,0 +1,62 @@
+    <script src="./lib/d3.v3.min.js"></script>
+    <script src="./lib/queue.v1.min.js"></script>
+
+<script>
+function create_choropleth(e, opts) {
+
+	var svg = d3.select(
+		e
+		.getSVGDocument()
+		.getElementsByTagName("svg")[0]
+	);
+
+	var sign = opts.order === 'desc' ? -1 : 1;
+
+	function accessor(d) {
+		return sign * parseFloat(d[opts.field]) || NaN;
+	}
+
+	var what = '.' + (opts.what || 'country');
+	var range = opts.range || ['#cc2f2f', 'yellow'];
+
+	queue()
+	.defer(d3.csv, opts.csv)
+	.await(function(err, data) {
+
+		var color = d3.scale.log()
+			.domain(d3.extent(data, accessor))
+			.range(range);
+
+		svg.selectAll(what)
+		.style({
+			fill: '#999',
+		});
+		
+		svg.selectAll('#gdp').remove();
+
+		data
+		.forEach(function(d,i) {
+			var id = '.' + d.code;
+			svg
+			.select(what + id)
+			.style({
+				fill: color(accessor(d)),
+				'fill-opacity': 1,
+			});
+		});
+	});
+}
+</script>
+
+
+
+<embed id="svgObject" src="build/visionscarto-bertin1953.svg" type="image/svg+xml" onload="create_choropleth(this, {csv: '../../roadskillmap-2015/data/sources/data.csv', field: 'deaths_per_100k', what: 'country', order: 'desc'}),create_choropleth(this, {csv: '../../roadskillmap-2015/data/sources/data.csv', field: 'deaths_pedestrians', what: 'population', order: 'desc'});"></embed>
+
+
+<embed id="svgObject" src="build/visionscarto-robinson.svg" type="image/svg+xml" onload="create_choropleth(this, {csv: '../../roadskillmap-2015/data/sources/data.csv', field: 'deaths_pedestrians', what: 'population', order: 'desc'});"></embed>
+
+
+<embed id="svgObject" src="build/visionscarto-larrivee.svg" type="image/svg+xml" onload="create_choropleth(this,{csv: '../../roadskillmap-2015/data/sources/data.csv', field: 'deaths_motorcyclists', what: 'country', order: 'desc'})"></embed>
+
+
+<embed id="svgObject" src="build/visionscarto-bertin1953.svg" type="image/svg+xml" onload="create_choropleth(this,{csv: '../../roadskillmap-2015/data/sources/data.csv', field: 'population', what: 'country', order: 'asc', range:['white', 'orange', 'red']})"></embed>

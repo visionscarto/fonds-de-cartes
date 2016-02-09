@@ -1,0 +1,40 @@
+<style id=svgstyle-1>
+#frame { fill: #fee; }
+.country { fill: red; } /* no data */
+#gdp { display: none; }
+#population circle { fill: white; fill-opacity: 0.2; stroke: #555; stroke-width: 0.1mm; }
+.AFG,.AGO,.ALB,.BDI,.BEN,.BFA,.BGD,.BOL,.BRN,.BTN,.BWA,.CAF,.CIV,.CMR,.COD,.COG,.DJI,.DOM,.DZA,.ERI,.EST,.ETH,.FJI,.GHA,.GIN,.GMB,.GNB,.GNQ,.GUY,.HTI,.HUN,.IDN,.IND,.ISL,.JAM,.KEN,.KGZ,.KHM,.LAO,.LBR,.LBY,.LKA,.LSO,.LTU,.LVA,.MDG,.MKD,.MLI,.MNG,.MOZ,.MRT,.MWI,.NER,.NGA,.NPL,.PAK,.PER,.PHL,.PNG,.PRY,.RWA,.SDN,.SEN,.SLB,.SLE,.SYR,.TCD,.TGO,.TJK,.TKM,.TLS,.TUN,.TZA,.UGA,.UZB,.VNM,.VUT,.YEM,.ZMB{ fill: green; }
+.ARE,.BIH,.FIN,.IRL,.ISR,.ITA,.MLT,.MNE,.PAN,.ROU{ fill-opacity: .40; }
+.ARG,.AUS,.AUT,.BEL,.BRA,.CAN,.CHE,.CHL,.CYP,.DEU,.DNK,.ESP,.FRA,.GBR,.GRC,.LUX,.NLD,.NOR,.PRT,.SWE,.URY,.USA{ fill-opacity: .60; }
+.SVK{ fill-opacity: .70; } .AZE,.BLR,.CHN,.COL,.GTM,.HND,.HRV,.IRQ,.JOR,.KAZ,.KWT,.MAR,.MEX,.OMN,.POL,.QAT,.SLV,.TUR,.UKR,.VEN{ fill-opacity: .80; }
+.ARM,.CUB,.EGY,.GAB,.GEO,.IRN,.MDA,.RUS{fill-opacity: .20;}
+.BGR,.BHS,.BLZ,.CRI,.CZE,.ECU,.JPN,.KOR,.LBN,.MYS,.NAM,.NIC,.NZL,.SAU,.SRB,.SUR,.SVN,.SWZ,.THA,.TTO,.ZAF{fill-opacity: .90;}
+
+
+</style>
+<style id=svgstyle-2>
+#frame { fill: #efe; }
+.country { fill: green; } /* no data */
+#population { display: none; }
+#gdp path { fill: orange; fill-opacity: 0.9 }
+.AFG,.AGO,.ALB,.BDI,.BEN,.BFA,.BGD,.BOL,.BRN,.BTN,.BWA,.CAF,.CIV,.CMR,.COD,.COG,.DJI,.DOM,.DZA,.ERI,.EST,.ETH,.FJI,.GHA,.GIN,.GMB,.GNB,.GNQ,.GUY,.HTI,.HUN,.IDN,.IND,.ISL,.JAM,.KEN,.KGZ,.KHM,.LAO,.LBR,.LBY,.LKA,.LSO,.LTU,.LVA,.MDG,.MKD,.MLI,.MNG,.MOZ,.MRT,.MWI,.NER,.NGA,.NPL,.PAK,.PER,.PHL,.PNG,.PRY,.RWA,.SDN,.SEN,.SLB,.SLE,.SYR,.TCD,.TGO,.TJK,.TKM,.TLS,.TUN,.TZA,.UGA,.UZB,.VNM,.VUT,.YEM,.ZMB{ fill-opacity: .10; }
+.ARE,.BIH,.FIN,.IRL,.ISR,.ITA,.MLT,.MNE,.PAN,.ROU{ fill-opacity: .40; }
+.ARG,.AUS,.AUT,.BEL,.BRA,.CAN,.CHE,.CHL,.CYP,.DEU,.DNK,.ESP,.FRA,.GBR,.GRC,.LUX,.NLD,.NOR,.PRT,.SWE,.URY,.USA{ fill-opacity: .60; }
+.SVK{ fill-opacity: .70; } .AZE,.BLR,.CHN,.COL,.GTM,.HND,.HRV,.IRQ,.JOR,.KAZ,.KWT,.MAR,.MEX,.OMN,.POL,.QAT,.SLV,.TUR,.UKR,.VEN{ fill-opacity: .80; }
+.ARM,.CUB,.EGY,.GAB,.GEO,.IRN,.MDA,.RUS{fill-opacity: .20;}
+.BGR,.BHS,.BLZ,.CRI,.CZE,.ECU,.JPN,.KOR,.LBN,.MYS,.NAM,.NIC,.NZL,.SAU,.SRB,.SUR,.SVN,.SWZ,.THA,.TTO,.ZAF{fill-opacity: .90;}
+
+
+</style>
+
+<script>function svginjectstyle(e, id) {
+  e.getSVGDocument()
+  .getElementsByTagName("svg")[0]
+  .appendChild(document.getElementById(id));
+}</script>
+
+
+<embed id="svgObject" src="build/visionscarto-bertin1953.svg" type="image/svg+xml" onload="svginjectstyle(this,'svgstyle-1')"></embed>
+
+<embed id="svgObject" src="build/visionscarto-robinson.svg" type="image/svg+xml" onload="svginjectstyle(this,'svgstyle-2')"></embed>
+
