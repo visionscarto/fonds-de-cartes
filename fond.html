@@ -318,22 +318,24 @@
 
                 // POPULATION
                 var data = pop
-                        .features
-                        .map(function(d) {
-                            d.xy = projection(d.geometry.coordinates)
-                            d.pop = parseFloat(d.properties.POP_EST);
-                            return d;
-                        })
-                        .filter(function(d) {
-                            return (d.properties.ISO_A3 !== -99) && d.pop > 0;
-                        })
-                        .sort(function (a, b) {
-                            return d3.descending(a.pop, b.pop);
-                        })
+                    .features
+                    .map(function (d) {
+                        d.xy = projection(d.geometry.coordinates)
+                        d.pop = parseFloat(d.properties.POP_EST);
+                        return d;
+                    })
+                    .filter(function (d) {
+                        return (d.properties.ISO_A3 !== -99) && d.pop > 0;
+                    })
+                    .sort(function (a, b) {
+                        return d3.descending(a.pop, b.pop);
+                    })
 
                 var pop_scale = d3.scale.sqrt()
-                .domain([0, d3.max(data, function(d) { return d.pop; })])
-                .range([1, 23]);
+                    .domain([0, d3.max(data, function (d) {
+                        return d.pop;
+                    })])
+                    .range([1, 23]);
 
                 world.append('g')
                     .attr('id', 'population')
@@ -362,22 +364,24 @@
 
                 // GDP/PIB
                 var data = pop
-                        .features
-                        .map(function(d) {
-                            d.xy = projection(d.geometry.coordinates)
-                            d.gdp = parseFloat(d.properties.GDP_MD_EST);
-                            return d;
-                        })
-                        .filter(function(d) {
-                            return (d.properties.ISO_A3 !== -99) && d.gdp > 0;
-                        })
-                        .sort(function (a, b) {
-                            return d3.descending(a.gdp, b.gdp);
-                        })
+                    .features
+                    .map(function (d) {
+                        d.xy = projection(d.geometry.coordinates)
+                        d.gdp = parseFloat(d.properties.GDP_MD_EST);
+                        return d;
+                    })
+                    .filter(function (d) {
+                        return (d.properties.ISO_A3 !== -99) && d.gdp > 0;
+                    })
+                    .sort(function (a, b) {
+                        return d3.descending(a.gdp, b.gdp);
+                    })
 
                 var gdp_scale = d3.scale.sqrt()
-                .domain([0, d3.max(data, function(d) { return d.gdp; })])
-                .range([1, 23]);
+                    .domain([0, d3.max(data, function (d) {
+                        return d.gdp;
+                    })])
+                    .range([1, 23]);
 
                 world.append('g')
                     .attr('id', 'gdp')
@@ -401,8 +405,8 @@
                         height: function (d) {
                             return gdp_scale(d.gdp);
                         },
-                        transform: function(d) {
-                            var x = -gdp_scale(d.gdp)/2;
+                        transform: function (d) {
+                            var x = -gdp_scale(d.gdp) / 2;
                             return 'translate(' + x + ',' + x + ')';
                         }
                     })
