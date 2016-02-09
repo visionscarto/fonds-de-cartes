@@ -121,6 +121,14 @@
                 .rotate([-10.23]);
             laius_projection = 'Projection d’Oswald Winkel, dite Winkel-Tripel (1921).';
             break;
+        case 'gallpeters':
+            projection = d3.geo.cylindricalEqualArea()
+                .parallel(45)
+                .translate([348, 240])
+                .scale(154)
+                .rotate([-10.23]);
+            laius_projection = 'Projection de James Gall (1855), popularisée par Arno Peters.';
+            break;
         case 'waterman':
             projection = d3.geo.polyhedron.waterman()
                 .rotate([25, -2])
