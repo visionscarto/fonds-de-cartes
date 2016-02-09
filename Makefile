@@ -14,12 +14,8 @@ init:
 topo:
 	topojson --properties \
 	--id-property id \
-	--simplify 0.00001 -- data/countries.geojson > build/countries.topo.json
-	topojson --properties \
-	--id-property id \
-	--projection 'd3.geo.visionscarto().translate([285,360])' \
-	-- data/countries.geojson > build/bertin1953.topo.json
-
+	--simplify 0.00001 \
+	-- data/countries.geojson > build/countries.topo.json
 
 
 ### PROJECTIONS
@@ -41,7 +37,7 @@ winkel3:
 
 
 ### OPTIM
-optim: optim-png optim-svg
+optim: optim-svg optim-png
 
 optim-png:
 	imageOptim --image-alpha --directory build/

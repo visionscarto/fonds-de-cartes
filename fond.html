@@ -149,21 +149,11 @@
             projection.rotate([parseFloat(rotate)]);
         }
 
-         // pour bertin1953 on utilise le topojson special
-        if (pj === 'bertin1953') {
-            topo = 'build/bertin1953.topo.json';
-            topoproj = null;
-        } else {
-            topoproj = projection;
-        }
-
         var width = 700,
             height = 475;
 
         var path = d3.geo.path()
             .projection(projection);
-        var topopath = d3.geo.path()
-            .projection(topoproj);
 
         var svg = d3.select("svg")
             .attr("width", width)
@@ -201,7 +191,7 @@
                     .attr('class', 'continents')
                     .attr('id', 'continents')
                     .datum(topojson.merge(wjson, countries.geometries))
-                    .attr("d", topopath);
+                    .attr("d", path);
 
 
                 world.append('g')
@@ -213,7 +203,7 @@
                     .attr('class', function (d) {
                         return 'country ' + class_iso_a3(d.properties);
                     })
-                    .attr("d", topopath)
+                    .attr("d", path)
                     .attr('id', function (d) {
                         return class_iso_a3(d.properties) + ' ' + d.properties.name;
                     });
@@ -225,7 +215,7 @@
                     .attr({
                         class: 'border',
                         id: 'borders',
-                        d: topopath
+                        d: path
                     });
                 world.append('path')
                     .datum(topojson.mesh(wjson, countries, function (a, b) {
@@ -234,7 +224,7 @@
                     .attr({
                         class: 'coast',
                         id: 'coasts',
-                        d: topopath
+                        d: path
                     });
 
 
