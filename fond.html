@@ -34,7 +34,9 @@
                     fill: #eee;
                 }
                 .capital {
-                    fill: #b47a2c;
+                    stroke: #000;
+                    stroke-width: 0.15mm;
+                    fill: white;
                 }
                 .country-island {
                     stroke: #555;
@@ -273,7 +275,7 @@
                         id: 'capitals',
                     });
 
-                cap.selectAll('circle')
+                cap.selectAll('rect')
                     .data(
                         capitals.map(function (d) {
                             var p = projection([parseFloat(d.lon), parseFloat(d.lat)]);
@@ -288,19 +290,21 @@
                         })
                 )
                     .enter()
-                    .append('circle')
+                    .append('rect')
                     .attr({
                         id: function (d) {
                             return d.id + ' ' + d.capital;
                         },
-                        cx: function (d) {
+                        x: function (d) {
                             return d.x;
                         },
-                        cy: function (d) {
+                        y: function (d) {
                             return d.y;
                         },
                         class: 'capital',
-                        r: '0.2mm',
+                        width: '0.4mm',
+                        height: '0.4mm',
+                        transform: 'translate(-0.2mm, -0.2mm)',
                     });
 
 
