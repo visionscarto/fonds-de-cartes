@@ -48,5 +48,5 @@ optim-png:
 	imageOptim --image-alpha --directory build/
 
 optim-svg:
-	svgo --precision=2 --disable=removeUnknownsAndDefaults build/
+	svgo --precision=2 --disable=removeUnknownsAndDefaults --disable=removeXMLProcInst build/
 
