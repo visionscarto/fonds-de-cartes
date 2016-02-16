@@ -55,6 +55,9 @@
                     fill: blue;
                     fill-opacity: 0.3;
                 }
+                #background {
+                    fill: none;
+                }
                 #frame {
                     fill: none;
                     stroke: #444;
@@ -171,6 +174,16 @@
             .attr("height", height)
             .attr('id', 'base map');
 
+
+        var bg = svg
+        .append('rect')
+            .attr({
+                id: 'background',
+                x: 2,
+                y: 2,
+                width: width - 8,
+                height: height - 5,
+        });
 
         var world = svg.append('g')
             .attr('id', 'world');
