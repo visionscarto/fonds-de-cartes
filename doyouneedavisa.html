@@ -2,6 +2,10 @@
 <meta charset="UTF-8">
     <script src="./lib/d3.v3.min.js"></script>
     <script src="./lib/queue.v1.min.js"></script>
+
+<style>
+svg #borders .border { stroke: white !important }
+</style>
 </head>
 
 
@@ -45,17 +49,20 @@ function choropleth(e, opts) {
 			total_pop += p;
 		});
 		function accessor(d) {
-			var iso = d.iso3, sum = 0, cool = [];
+			var iso = d.iso3, sum = 0, arrival = 0, cool = [];
 			data.forEach(function(e) {
 				if (parseInt(e[iso]) >= opts.threshold) {
 					sum += (parseInt(pops.get(e['iso3']))||0);
 					cool.push(e['iso3']);
 				}
+				if (parseInt(e[iso]) == 3) {
+					arrival += (parseInt(pops.get(e['iso3']))||0);
+				}
 			});
 
 console.log(iso, sum, cool);
 
-			return [sum, cool];
+			return [sum, arrival, cool];
 		}
 
 		data = data.map(function(d) {
@@ -63,13 +70,40 @@ console.log(iso, sum, cool);
 			d.number = a[0] / total_pop;
 			var classes = 10;
 			d.number = total_pop * Math.floor(classes*d.number)/classes;
-			d.cool = a[1];
+
+			d.arrival = a[1] / total_pop;
+			d.cool = a[2];
 			return d;
 		});
 
-		var color = d3.scale.sqrt()
+		var lin = d3.scale.linear()
+			.domain([0, total_pop]) // d3.extent(data, function(d) {return d.number;})])
+			.range([0,1]);
+
+		labcolor = function(n, a) {
+			if (opts.threshold == 4) a = 0.1;
+			a = 0.1;
+			return d3.lab(lin(n), 60 - a * 50, 40 + a * 90).toString();
+		}
+		
+		labcolor2 = function(n,a) {
+			if (opts.threshold == 4) a = 0.1;
+			else a = a < 0.2 ? 0 : 0.8
+			var c = d3.interpolateLab('#41f441','orange','#ffd86e');
+			return d3.interpolateRgb('#111', c(a))(lin(n));
+		}
+
+		hslcolor = function(n, a) {
+			if (opts.threshold == 4) a = 0.1;
+			b = 0.2;
+			return d3.hsl(128, a, 0.10 + lin(n)/2).toString();
+		}
+
+		lincolor = d3.scale.linear()
 			.domain([0, total_pop]) // d3.extent(data, function(d) {return d.number;})])
 			.range(range);
+
+		color = labcolor2
 
 		svg.selectAll(what)
 		.style({
@@ -77,6 +111,10 @@ console.log(iso, sum, cool);
 		});
 		
 		svg.selectAll('#gdp, #population, #capitals').remove();
+		svg.selectAll('#borders').style({
+			stroke: 'white',
+			'stroke-width': '0.2mm',
+		});
 
 		data
 		.forEach(function(d) {
@@ -84,7 +122,7 @@ console.log(iso, sum, cool);
 			svg
 			.select(what + id)
 			.style({
-				fill: color(d.number),
+				fill: color(d.number, d.arrival),
 				'fill-opacity': 1,
 			})
 			.on('mouseover', function() {
