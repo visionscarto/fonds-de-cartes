@@ -76,7 +76,7 @@ console.log(iso, sum, cool);
 			return d;
 		});
 
-		var lin = d3.scale.linear()
+		var lin = d3.scale.pow(0.8)  // Bertin explique que linear c'est pas bon pour la luminosité, trouver la bonne fonction !
 			.domain([0, total_pop]) // d3.extent(data, function(d) {return d.number;})])
 			.range([0,1]);
 
@@ -109,12 +109,6 @@ console.log(iso, sum, cool);
 		.style({
 			fill: '#999',
 		});
-		
-		svg.selectAll('#gdp, #population, #capitals').remove();
-		svg.selectAll('#borders').style({
-			stroke: 'white',
-			'stroke-width': '0.2mm',
-		});
 
 		data
 		.forEach(function(d) {
@@ -130,6 +124,15 @@ console.log(iso, sum, cool);
 				.text('ok ' + id + ' ' + Math.floor(d.number / 1e6) + 'm');
 			});
 		});
+	});
+
+	svg.selectAll('#gdp, #population, #capitals').remove();
+	svg.selectAll('#borders').style({
+		stroke: 'white',
+		'stroke-width': '0.2mm',
+	});
+	svg.selectAll('#background').style({
+		fill: 'beige',
 	});
 }
 </script>
