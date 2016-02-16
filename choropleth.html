@@ -1,8 +1,11 @@
     <script src="./lib/d3.v3.min.js"></script>
     <script src="./lib/queue.v1.min.js"></script>
+    <script src="./simple-statistics/dist/simple_statistics.min.js"></script>
+    <script src="./simple-statistics/master/src/ckmeans.js"></script>
+
 
 <script>
-function create_choropleth(e, opts) {
+function choropleth(e, opts) {
 
 	var svg = d3.select(
 		e
@@ -17,14 +20,31 @@ function create_choropleth(e, opts) {
 	}
 
 	var what = '.' + (opts.what || 'country');
-	var range = opts.range || ['#cc2f2f', 'yellow'];
+	var range = opts.range ? opts.range : ['#cc2f2f', 'yellow'];
+
+	if (opts.titre) {
+		var titre = (typeof opts.titre === 'object')
+			? opts.titre
+			: [ opts.titre ];
+
+		svg
+			.selectAll('#title text')
+			.data(titre)
+			.text(function(d) { return d; })
+			.exit()
+			.remove();
+	}
 
 	queue()
 	.defer(d3.csv, opts.csv)
 	.await(function(err, data) {
+		var numbers = data.map(accessor);
+		console.log(ss.ckmeans(numbers.filter(function(d) {return !isNaN(d);})
+		//.map(function(d) {return Math.sqrt(d);})
+		, 5));
 
 		var color = d3.scale.log()
-			.domain(d3.extent(data, accessor))
+			.domain(d3.extent(numbers))
 			.range(range);
 
 		svg.selectAll(what)
@@ -50,13 +70,15 @@ function create_choropleth(e, opts) {
 
 
 
-<embed id="svgObject" src="build/visionscarto-bertin1953.svg" type="image/svg+xml" onload="create_choropleth(this, {csv: '../../roadskillmap-2015/data/sources/data.csv', field: 'deaths_per_100k', what: 'country', order: 'desc'}),create_choropleth(this, {csv: '../../roadskillmap-2015/data/sources/data.csv', field: 'deaths_pedestrians', what: 'population', order: 'desc'});"></embed>
+<embed id="svgObject" src="build/visionscarto-bertin1953.svg" type="image/svg+xml" onload="choropleth(this, {csv: '../../roadskillmap-2015/data/sources/data.csv', field: 'deaths_per_100k', what: 'country', order: 'asc', range:['white', '#ff4d32'], titre: ['Morts sur la route', 'C’est pas cool' ] }),choropleth(this, {csv: '../../roadskillmap-2015/data/sources/data.csv', field: 'deaths_pedestrians', what: 'population', order: 'desc', range: ['#eff', '#536'] });"></embed>
+
+<embed id="svgObject" src="build/visionscarto-bertin1953.svg" type="image/svg+xml" onload="choropleth(this, {csv: '../../roadskillmap-2015/data/sources/data.csv', field: 'deaths_per_100k', what: 'country', order: 'desc'}),choropleth(this, {csv: '../../roadskillmap-2015/data/sources/data.csv', field: 'deaths_pedestrians', what: 'population', order: 'desc'});"></embed>
 
 
-<embed id="svgObject" src="build/visionscarto-robinson.svg" type="image/svg+xml" onload="create_choropleth(this, {csv: '../../roadskillmap-2015/data/sources/data.csv', field: 'deaths_pedestrians', what: 'population', order: 'desc'});"></embed>
+<embed id="svgObject" src="build/visionscarto-robinson.svg" type="image/svg+xml" onload="choropleth(this, {csv: '../../roadskillmap-2015/data/sources/data.csv', field: 'deaths_pedestrians', what: 'population', order: 'desc', titre: 'Coucou' });"></embed>
 
 
-<embed id="svgObject" src="build/visionscarto-larrivee.svg" type="image/svg+xml" onload="create_choropleth(this,{csv: '../../roadskillmap-2015/data/sources/data.csv', field: 'deaths_motorcyclists', what: 'country', order: 'desc'})"></embed>
+<embed id="svgObject" src="build/visionscarto-larrivee.svg" type="image/svg+xml" onload="choropleth(this,{csv: '../../roadskillmap-2015/data/sources/data.csv', field: 'deaths_motorcyclists', what: 'country', order: 'desc'})"></embed>
 
 
-<embed id="svgObject" src="build/visionscarto-gallpeters.svg" type="image/svg+xml" onload="create_choropleth(this,{csv: '../../roadskillmap-2015/data/sources/data.csv', field: 'population', what: 'country', order: 'asc', range:['white', 'orange', 'red']})"></embed>
+<embed id="svgObject" src="build/visionscarto-gallpeters.svg" type="image/svg+xml" onload="choropleth(this,{csv: '../../roadskillmap-2015/data/sources/data.csv', field: 'population', what: 'country', order: 'asc', range:['white', 'orange', 'red']})"></embed>

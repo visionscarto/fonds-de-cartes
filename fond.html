@@ -70,6 +70,7 @@
     <script src="./lib/topojson.v1.min.js"></script>
     <script src="./lib/queue.v1.min.js"></script>
     <script src="./lib/d3.geo.projection.visionscarto.js"></script>
+
     <!-- <script src="./lib/polyhedron.js"></script> -->
     <script>
         function param(x, def) {
@@ -170,11 +171,11 @@
             .attr("height", height)
             .attr('id', 'base map');
 
-        graphsignature(['Visionscarto', '2016'], laius);
-
 
         var world = svg.append('g')
             .attr('id', 'world');
+
+        graphsignature([' ',' ',' '], ['Visionscarto', '2016'], laius);
 
         queue()
             .defer(d3.json, topo)
@@ -420,7 +421,7 @@
             return (prop.iso_a3 != '-99') ? prop.iso_a3 : prop.sov_a3;
         }
 
-        function graphsignature(lignes, laius) {
+        function graphsignature(titre, lignes, laius) {
             var sig = svg
                 .append('g')
                 .attr('id', 'signature');
@@ -433,9 +434,28 @@
                     width: width - 8,
                     height: height - 5,
                 });
-            var signature = sig.append('g').attr('id', lignes[0]);
 
-            signature
+            var gtitre = sig.append('g').attr('id', 'title');
+            var size = 36;
+            gtitre
+                .selectAll('text')
+                .data(titre)
+                .enter()
+                .append('text')
+                .attr({
+                    y: function (d, i) { return (size+4) * i; },
+                    transform: 'translate(' + [width - 14, size ] + ')',
+                    fill: 'black',
+                    'text-anchor': 'end',
+                })
+                .style("font-size", size + 'px')
+                .text(function (d) {
+                    return d;
+                });
+
+            var gsignature = sig.append('g').attr('id', lignes[0]);
+
+            gsignature
                 .selectAll('text')
                 .data(lignes)
                 .enter()
@@ -450,14 +470,14 @@
                     return d.toUpperCase();
                 });
 
-            var bbox = signature[0][0].getBBox();
-            signature
+            var bbox = gsignature[0][0].getBBox();
+            gsignature
                 .attr({
                     transform: 'translate(' + [width - bbox.width / 2 - 14, height - bbox.height - 2] + ')',
                 });
 
 
-            signature
+            gsignature
                 .selectAll('line')
                 .data(lignes.slice(1))
                 .enter()
@@ -475,9 +495,9 @@
                 .attr("stroke", "black");
 
             if (laius) {
-                signature = sig.append('g')
+                glaius = sig.append('g')
                     .attr('id', laius[0]);
-                signature.selectAll('text')
+                glaius.selectAll('text')
                     .data(laius)
                     .enter()
                     .append('text')
@@ -491,8 +511,8 @@
                         return d;
                     })
 
-                var bbox = signature[0][0].getBBox();
-                signature
+                var bbox = glaius[0][0].getBBox();
+                glaius
                     .attr({
                         transform: 'translate(' + [12, height - bbox.height - 4] + ')',
                     });
