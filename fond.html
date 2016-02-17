@@ -312,18 +312,20 @@
                         })
                 )
                     .enter()
-                    .append('rect')
+                    .append('g')
                     .attr({
                         id: function (d) {
                             return d.id + ' ' + d.capital;
                         },
-                        x: function (d) {
-                            return d.x;
+                        class: function(d) {
+                            return 'capital ' + d.id;
                         },
-                        y: function (d) {
-                            return d.y;
+                        transform: function (d) {
+                            return 'translate(' + d.x + ',' + d.y +')';
                         },
-                        class: 'capital',
+                    })
+                    .append('rect')
+                    .attr({
                         width: '0.4mm',
                         height: '0.4mm',
                         transform: 'translate(-0.5, -0.5)',
