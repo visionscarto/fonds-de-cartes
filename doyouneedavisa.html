@@ -18,6 +18,11 @@ function choropleth(e, opts) {
 		.getElementsByTagName("svg")[0]
 	);
 
+	// http://bl.ocks.org/mimno/6a038f1790a1d69bb01b
+	svg.append('defs')
+	.html('<filter id="inset-shadow-green" x="-50%" y="-50%" width="200%" height="200%"><feComponentTransfer in="SourceAlpha">  <feFuncA type="table" tableValues="1 0" /></feComponentTransfer><feGaussianBlur stdDeviation="1.5" result="blur"/><feOffset dx="0" dy="0" result="offsetblur"/><feFlood flood-color="rgb(127,201,127)" result="color"/><feComposite in2="offsetblur" operator="in"/><feComposite in2="SourceAlpha" operator="in" /><feMerge>  <feMergeNode in="SourceGraphic" />  <feMergeNode /></feMerge></filter> '
+	+ '<filter id="inset-shadow-orange" x="-50%" y="-50%" width="200%" height="200%"> <feComponentTransfer in="SourceAlpha">   <feFuncA type="table" tableValues="1 0" /> </feComponentTransfer> <feGaussianBlur stdDeviation="1.5" result="blur"/> <feOffset dx="0" dy="0" result="offsetblur"/> <feFlood flood-color="rgb(253,40,44)" result="color"/> <feComposite in2="offsetblur" operator="in"/> <feComposite in2="SourceAlpha" operator="in" /> <feMerge>   <feMergeNode in="SourceGraphic" />   <feMergeNode /> </feMerge>     </filter>');
+
 	var sign = opts.order === 'desc' ? -1 : 1;
 
 
@@ -93,6 +98,11 @@ console.log(iso, sum, cool);
 			return d3.interpolateRgb('#111', c(a))(lin(n));
 		}
 
+		labcolor3 = function(n,a) {
+			var c = 'yellow';'#41f441';
+			return d3.interpolateRgb('#111', c)(lin(n));
+		}
+
 		hslcolor = function(n, a) {
 			if (opts.threshold == 4) a = 0.1;
 			b = 0.2;
@@ -103,7 +113,7 @@ console.log(iso, sum, cool);
 			.domain([0, total_pop]) // d3.extent(data, function(d) {return d.number;})])
 			.range(range);
 
-		color = labcolor2
+		color = labcolor3
 
 		svg.selectAll(what)
 		.style({
@@ -114,25 +124,47 @@ console.log(iso, sum, cool);
 		.forEach(function(d) {
 			var id = '.' + d.iso3;
 			svg
-			.select(what + id)
+			.select('.country' + id + ',.country-island' + id)
 			.style({
 				fill: color(d.number, d.arrival),
 				'fill-opacity': 1,
 			})
+			.attr(
+			"filter", (d.arrival > 0.2) ? "url(#inset-shadow-orange)" : "url(#inset-shadow-green)"
+			)
 			.on('mouseover', function() {
 				svg.select('#title text')
 				.text('ok ' + id + ' ' + Math.floor(d.number / 1e6) + 'm');
 			});
+			
+			var capi = svg.select('.population' + id);
+			if (d.arrival > 0.2) {
+				capi
+				.attr({
+					r: '2',
+				})
+				.classed('entryvisa', true)
+				.style({
+					fill: 'red',
+					'fill-opacity': 0.6,
+					stroke: 'red',
+				});
+			}
+
 		});
+
+		svg.selectAll('.population:not(.entryvisa)').remove();
 	});
 
-	svg.selectAll('#gdp, #population, #capitals').remove();
+	svg.selectAll('#gdp').remove();
 	svg.selectAll('#borders').style({
 		stroke: 'white',
-		'stroke-width': '0.2mm',
+		'stroke-width': '0.3mm',
 	});
+	svg.selectAll('#coasts').remove();
+	svg.selectAll('#capitals rect').remove();
 	svg.selectAll('#background').style({
-		fill: 'beige',
+		fill: '#eff4fe',
 	});
 }
 </script>
