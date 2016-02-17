@@ -211,14 +211,35 @@
                         );
                     });
 
-                world.append('path')
+                world.append('g')
                     .attr('class', 'continents')
                     .attr('id', 'continents')
-                    .datum(topojson.merge(wjson, countries.geometries))
-                    .attr("d", path);
+                    .selectAll('.continent')
+                    .data(
+                        d3.set(countries.geometries.map(function(d) {
+                            return d.properties.continent;
+                        }))
+                        .values()
+                    )
+                    .enter()
+                    .append('path')
+                    .attr({
+                        class: 'continent',
+                        id: function(d) { return d; },
+                        d: function(d) {
+                            return path(
+                                topojson.merge(wjson,
+                                    countries.geometries
+                                    .filter(function(e) {
+                                        return e.properties.continent == d;
+                                    })
+                                )
+                            );
+                        },
+                    });
 
 
-                world.append('g')
+                world.append('nibg')
                     .attr('id', 'countries')
                     .selectAll('.country')
                     .data(topojson.feature(wjson, countries).features)
