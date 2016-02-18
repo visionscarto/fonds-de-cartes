@@ -132,6 +132,7 @@ console.log(iso, sum, cool);
 			.attr(
 			"filter", (d.arrival > 0.2) ? "url(#inset-shadow-orange)" : "url(#inset-shadow-green)"
 			)
+			//.attr({ "paint-order": "stroke" })
 			.on('mouseover', function() {
 				svg.select('#title text')
 				.text('ok ' + id + ' ' + Math.floor(d.number / 1e6) + 'm');
@@ -156,14 +157,14 @@ console.log(iso, sum, cool);
 		svg.selectAll('.population:not(.entryvisa)').remove();
 	});
 
-	svg.selectAll('#gdp').remove();
-	svg.selectAll('#borders').style({
+	svg.select('#gdp').remove();
+	svg.select('#borders').style({
 		stroke: 'white',
 		'stroke-width': '0.3mm',
 	});
-	svg.selectAll('#coasts').remove();
-	svg.selectAll('#capitals rect').remove();
-	svg.selectAll('#background').style({
+	svg.select('#coasts').remove();
+	svg.select('#capitals').remove();
+	svg.select('#background').style({
 		fill: '#eff4fe',
 	});
 }
@@ -171,7 +172,7 @@ console.log(iso, sum, cool);
 
 
 
-<embed id="svgObject" src="build/visionscarto-bertin1953.svg" type="image/svg+xml" onload="choropleth(this, {csv: '../doyouneedavisa/doyouneedavisa.csv', threshold: 3, what: 'country', order: 'asc', range:['black', '#00ffe2'], titre: ['Humains acceptés', 'sans visa préalable' ] });"></embed>
+<embed id="svgObject" src="build/visionscarto-winkel3.svg" type="image/svg+xml" onload="choropleth(this, {csv: '../doyouneedavisa/doyouneedavisa.csv', threshold: 3, what: 'country', order: 'asc', range:['black', '#00ffe2'], titre: ['Humains acceptés', 'sans visa préalable' ] });"></embed>
 
 
-<embed id="svgObject" src="build/visionscarto-bertin1953.svg" type="image/svg+xml" onload="choropleth(this, {csv: '../doyouneedavisa/doyouneedavisa.csv', threshold: 4, what: 'country', order: 'asc', range:['black', '#ff55d8'], titre: ['Humains acceptés', 'sans visa' ] });"></embed>
+<embed id="svgObject" src="build/visionscarto-robinson.svg" type="image/svg+xml" onload="choropleth(this, {csv: '../doyouneedavisa/doyouneedavisa.csv', threshold: 4, what: 'country', order: 'asc', range:['black', '#ff55d8'], titre: ['Humains acceptés', 'sans visa' ] });"></embed>
