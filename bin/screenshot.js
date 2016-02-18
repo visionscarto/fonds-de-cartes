@@ -3,7 +3,7 @@
 // PDF ou JPG ont une qualité inférieure
 var args = require('system').args,
     url = args[1],
-    dest = args[2] || 'screenshot.png',
+    dest = args[2] || 'screenshot',
     scale = eval(args[3]) || 1,
     secs = 1;
 
@@ -40,10 +40,29 @@ page.open(url,
             page.render(dest + '.png');
 
             var a = page.evaluate(function() {
-              return document.all[0].outerHTML.match(/<svg[^]*?<\/svg>/gm)[0];
-            });
-            saveas('<?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">' + a, dest + '.svg');
+                var res = [ document.all[0].outerHTML ];
 
+                var embeds = document.getElementsByTagName('embed'), e;
+
+                for (i=0; i< embeds.length; i++) {
+                    var txt = (new XMLSerializer())
+                    .serializeToString(embeds[parseInt(i)].getSVGDocument());
+                    res.push(txt);
+                }
+                return res.join("\n\n");
+            });
+
+            // match all SVGs and save them
+            var i = 0;
+            var u = a.replace(/<svg[^]*?<\/svg>/gm, function(svg) {
+
+                // plantage sur les textures !
+                svg = svg
+                .replace(/(fill: )(#.....)( rgba\(.*?\))?;/g, '$1 url($2);')
+                .replace(/&nbsp;/g, ' ');
+                saveas('<?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">' + svg, dest + (i>0 ? i : '') + '.svg');
+                i++;
+            });
             phantom.exit();
         }, secs * 1000);
 
@@ -57,5 +76,5 @@ function saveas(content, path) {
 
 
 function usage() {
-    return args[0] + '[url] [dest.png]';
+    return args[0] + '[url] [dest]';
 }
