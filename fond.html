@@ -74,7 +74,6 @@
     <script src="./lib/queue.v1.min.js"></script>
     <script src="./lib/d3.geo.projection.visionscarto.js"></script>
 
-    <!-- <script src="./lib/polyhedron.js"></script> -->
     <script>
         function param(x, def) {
             var re = new RegExp('[?](.*&)*' + x + '=([^&]*)'),
@@ -536,9 +535,9 @@
                 .attr("stroke", "black");
 
             if (laius) {
-                glaius = sig.append('g')
+                glaius = sig.append('text')
                     .attr('id', 'presentation');
-                glaius.append('text')
+                glaius
                     .selectAll('tspan')
                     .data(laius)
                     .enter()
@@ -554,7 +553,7 @@
                     .style("font-size", "8px")
                     .text(function (d) {
                         return d;
-                    })
+                    });
 
                 var bbox = glaius[0][0].getBBox();
                 glaius
