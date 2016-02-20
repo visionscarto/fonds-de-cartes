@@ -1,15 +1,50 @@
 #! /usr/bin/env phantomjs
 
+var system = require('system');
+var env = system.env;
+
+
+function usage() {
+    return args[0] + ' [url] [dest]';
+}
+
+
+// CLI options
+// sudo npm install -g optparse
+var optparse = require('/usr/local/lib/node_modules/optparse/lib/optparse');
+var switches = [
+    ['-h', '--help', 'Shows help sections']
+];
+var parser = new optparse.OptionParser(switches);
+
+parser.on('help', function() {
+    console.log(usage());
+    phantom.exit();
+});
+
+
+
+
 // PDF ou JPG ont une qualité inférieure
 var args = require('system').args,
-    url = args[1],
-    dest = args[2] || 'screenshot',
-    scale = eval(args[3]) || 1,
-    secs = 1;
+    url = args[1];
+
+parser.parse(args);
 
 if (!url) {
     console.log(usage());
     phantom.exit();
+}
+
+var dest = args[2] || env['HOME'] + '/Dropbox/screenshots/' + url.replace(/[.:\/]/g, '-'),
+    scale = eval(args[3]) || 1,
+    secs = 1;
+
+
+
+
+if (!url.match(/^(file|https?):\/\//)) {
+    url = 'http://' + url;
 }
 
 var page = require('webpage').create();
@@ -75,6 +110,3 @@ function saveas(content, path) {
 }
 
 
-function usage() {
-    return args[0] + '[url] [dest]';
-}
