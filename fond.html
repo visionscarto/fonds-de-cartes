@@ -156,7 +156,8 @@
         var laius = [
           laius_projection,
           'Contours : Natural Earth, modifiés Visionscarto. Logiciel : D3.js',
-          'Gratuit et libre pour tous usages. Nous aimons les cartes, partageons-les !  contact@visionscarto.net'
+          'Gratuit et libre pour tous usages.',
+          'Nous aimons les cartes, partageons-les !  contact@visionscarto.net'
         ];
 
         if (rotate) {
@@ -176,19 +177,19 @@
 
 
         var bg = svg
-        .append('rect')
+            .append('rect')
             .attr({
                 id: 'background',
                 x: 2,
                 y: 2,
                 width: width - 8,
                 height: height - 5,
-        });
+            });
 
         var world = svg.append('g')
             .attr('id', 'world');
 
-        graphsignature([' ',' ',' '], ['Visionscarto', '2016'], laius);
+        graphsignature([' ', ' ', ' '], ['Visionscarto', '2016'], laius);
 
         queue()
             .defer(d3.json, topo)
@@ -216,21 +217,23 @@
                     .attr('id', 'continents')
                     .selectAll('.continent')
                     .data(
-                        d3.set(countries.geometries.map(function(d) {
+                        d3.set(countries.geometries.map(function (d) {
                             return d.properties.continent;
                         }))
                         .values()
-                    )
+                )
                     .enter()
                     .append('path')
                     .attr({
                         class: 'continent',
-                        id: function(d) { return d; },
-                        d: function(d) {
+                        id: function (d) {
+                            return d;
+                        },
+                        d: function (d) {
                             return path(
                                 topojson.merge(wjson,
                                     countries.geometries
-                                    .filter(function(e) {
+                                    .filter(function (e) {
                                         return e.properties.continent == d;
                                     })
                                 )
@@ -338,11 +341,11 @@
                         id: function (d) {
                             return d.id + ' ' + d.capital;
                         },
-                        class: function(d) {
+                        class: function (d) {
                             return 'capital ' + d.id;
                         },
                         transform: function (d) {
-                            return 'translate(' + d.x + ',' + d.y +')';
+                            return 'translate(' + d.x + ',' + d.y + ')';
                         },
                     })
                     .append('rect')
@@ -479,8 +482,10 @@
                 .enter()
                 .append('text')
                 .attr({
-                    y: function (d, i) { return (size+4) * i; },
-                    transform: 'translate(' + [width - 14, size ] + ')',
+                    y: function (d, i) {
+                        return (size + 4) * i;
+                    },
+                    transform: 'translate(' + [width - 14, size] + ')',
                     fill: 'black',
                     'text-anchor': 'end',
                 })
@@ -532,17 +537,21 @@
 
             if (laius) {
                 glaius = sig.append('g')
-                    .attr('id', laius[0]);
-                glaius.selectAll('text')
+                    .attr('id', 'presentation');
+                glaius.append('text')
+                    .selectAll('tspan')
                     .data(laius)
                     .enter()
-                    .append('text')
-                    .attr("y", function (d, i) {
-                        return 9 * i;
+                    .append('tspan')
+                    .attr({
+                        x: 0,
+                        y: function (d, i) {
+                            return 10 * i;
+                        },
                     })
                     .attr("fill", "black")
                     .attr("text-anchor", "start")
-                    .style("font-size", "6px")
+                    .style("font-size", "8px")
                     .text(function (d) {
                         return d;
                     })
