@@ -45,6 +45,8 @@ bottomley: ## projection bottomley
 gallpeters: ## projection gall-peters
 	./bin/screenshot.js file://`pwd`/fond.html?projection=gallpeters build/visionscarto-gallpeters 2
 
+timesus: ## projection Times centrée sur les US
+	./bin/screenshot.js file://`pwd`/fond.html?projection=timesus build/visionscarto-timesus 2
 
 
 optim: ## optimize all images
