@@ -1,19 +1,15 @@
-all: ## data & fonds de cartes
-	data fonds
+all: data fonds ## data & fonds de cartes
 
-fonds: ## fonds de cartes standards
-	bertin1953 robinson winkel3 optim
+fonds: bertin1953 robinson winkel3 optim ## fonds de cartes standards
 
-fonds-bizarres: ## fonds de cartes bizarres
-	larrivee bottomley gallpeters
+fonds-bizarres: larrivee bottomley gallpeters ## fonds de cartes bizarres
 
 
 ### DATA
-data: ## initialize data
-	init topo
+data: init topo ## initialize data
 
 init: ## create build/ directory
-	test -d build || mkdir build
+	mkdir -p build
 
 topo: ## create build/countries.topo.json
 	topojson --properties \
@@ -49,8 +45,7 @@ timesus: ## projection Times centrée sur les US
 	./bin/screenshot.js file://`pwd`/fond.html?projection=timesus build/visionscarto-timesus 2
 
 
-optim: ## optimize all images
-	optim-svg optim-png
+optim: optim-svg optim-png ## optimize all images
 
 optim-png: ## optimize PNG
 	imageOptim --image-alpha --directory build/
