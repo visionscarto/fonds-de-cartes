@@ -381,7 +381,7 @@
                         return d;
                     })
                     .filter(function (d) {
-                        return (d.properties.ISO_A3 !== -99) && d.pop > 0;
+                        return (d.properties.GU_A3 !== -99) && d.pop > 0;
                     })
                     .sort(function (a, b) {
                         return d3.descending(a.pop, b.pop);
@@ -400,7 +400,7 @@
                     .enter()
                     .append('circle')
                     .attr('class', function (d) {
-                        return 'population ' + (d.properties.ISO_A3);
+                        return 'population ' + (d.properties.GU_A3);
                     })
                     .attr({
                         cx: function (d) {
@@ -414,7 +414,7 @@
                         },
                     })
                     .attr('id', function (d) {
-                        return d.properties.ISO_A3 + ' ' + d.properties.NAME;
+                        return d.properties.GU_A3 + ' ' + d.properties.NAME;
                     });
 
 
@@ -427,7 +427,7 @@
                         return d;
                     })
                     .filter(function (d) {
-                        return (d.properties.ISO_A3 !== -99) && d.gdp > 0;
+                        return (d.properties.GU_A3 !== -99) && d.gdp > 0;
                     })
                     .sort(function (a, b) {
                         return d3.descending(a.gdp, b.gdp);
@@ -446,7 +446,7 @@
                     .enter()
                     .append('rect')
                     .attr('class', function (d) {
-                        return 'gdp ' + (d.properties.ISO_A3);
+                        return 'gdp ' + (d.properties.GU_A3);
                     })
                     .attr({
                         x: function (d) {
@@ -467,7 +467,7 @@
                         }
                     })
                     .attr('id', function (d) {
-                        return d.properties.ISO_A3 + ' ' + d.properties.NAME;
+                        return d.properties.GU_A3 + ' ' + d.properties.NAME;
                     });
             });
 
