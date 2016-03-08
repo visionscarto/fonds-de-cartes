@@ -149,6 +149,14 @@
                 .precision(.1);
             laius_projection = 'Projection de Waterman.';
             break;
+        case 'timesus':
+            projection = d3.geo.times()
+                .rotate([117,-5])
+                .scale(151)
+                .translate([347, 257])
+                .precision(.1);
+            laius_projection = 'Projection “Times” centrée sur les États-Unis.';
+            break;
         default:
             if (pj in d3.geo) {
                 projection = d3.geo[pj]();
