@@ -48,7 +48,7 @@ timesus: ## projection Times centrée sur les US
 optim: optim-svg optim-png ## optimize all images
 
 optim-png: ## optimize PNG
-	imageOptim --image-alpha --directory build/
+	imageOptim --directory build/
 
 optim-svg: ## optimize SVG
 	svgo --precision=2 --disable=removeUnknownsAndDefaults --disable=removeXMLProcInst build/
