@@ -102,7 +102,8 @@
         switch (pj) {
         case 'bertin1953':
             projection = d3.geo.visionscarto()
-                .translate([285, 360]);
+                .scale(169)
+                .translate([300, 236]);
             laius_projection = 'Projection créée par Philippe Rivière d’après Jacques Bertin (1953).';
             break;
         case 'robinson':
