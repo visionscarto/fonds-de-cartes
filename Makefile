@@ -1,6 +1,6 @@
 all: data fonds ## data & fonds de cartes
 
-fonds: bertin1953 robinson winkel3 optim ## fonds de cartes standards
+fonds: bertin1953 robinson winkel-tripel optim ## fonds de cartes standards
 
 fonds-bizarres: larrivee bottomley gallpeters ## fonds de cartes bizarres
 
@@ -26,8 +26,8 @@ bertin1953: ## projection bertin 1953
 robinson: ## projection robinson
 	./bin/screenshot.js file://`pwd`/fond.html?projection=robinson build/visionscarto-robinson 2
 
-winkel3: ## projection winkel-tripel
-	./bin/screenshot.js file://`pwd`/fond.html?projection=winkel3 build/visionscarto-winkel3 2
+winkel-tripel: ## projection winkel-tripel
+	./bin/screenshot.js file://`pwd`/fond.html?projection=winkel-tripel build/visionscarto-winkel-tripel 2
 
 
 ### PROJECTIONS BIZARRES
