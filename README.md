@@ -17,8 +17,9 @@
 - [Larrivée](http://bl.ocks.org/mbostock/3719042)
 - [Robinson](http://bl.ocks.org/mbostock/3710566)
 - [Winkel-Tripel](http://bl.ocks.org/mbostock/3682676)
+- [Gall-Peters](http://bl.ocks.org/mbostock/3946824)
 
-(Toutes les projections sont faites avec une rotation de 10,2° de manière à faire passer la ligne de césure dans le détroit de Bering.)
+(La plupart des projections sont faites avec une rotation de 10,2° de manière à faire passer la ligne de césure dans le détroit de Bering.)
 
 ### Logiciels
 
@@ -28,7 +29,4 @@
 - [PhantomJS](http://phantomjs.org/)
 - [svgo](https://github.com/svg/svgo)
 - [imageOptim](http://jamiemason.github.io/ImageOptim-CLI/)
-
-Une fois topojson installé, il faut le remplacer par la version se trouvant dans `bin/`, qui contient la projection visionscarto-bertin-1953.
-
 
