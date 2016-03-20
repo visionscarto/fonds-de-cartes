@@ -11,6 +11,7 @@ data: init topo ## initialize data
 init: ## create build/ directory
 	mkdir -p build
 
+## pour simplifier un peu : 0.00005
 topo: ## create build/countries.topo.json
 	topojson --properties \
 	--id-property id \
@@ -21,28 +22,28 @@ topo: ## create build/countries.topo.json
 ### PROJECTIONS
 
 bertin1953: ## projection bertin 1953
-	./bin/screenshot.js file://`pwd`/fond.html?projection=bertin1953 build/visionscarto-bertin1953 2
+	./bin/screenshot.js file://`pwd`/fond.html?projection=bertin1953 build/visionscarto-bertin1953 --scale 2
 
 robinson: ## projection robinson
-	./bin/screenshot.js file://`pwd`/fond.html?projection=robinson build/visionscarto-robinson 2
+	./bin/screenshot.js file://`pwd`/fond.html?projection=robinson build/visionscarto-robinson --scale 2
 
 winkel-tripel: ## projection winkel-tripel
-	./bin/screenshot.js file://`pwd`/fond.html?projection=winkel-tripel build/visionscarto-winkel-tripel 2
+	./bin/screenshot.js file://`pwd`/fond.html?projection=winkel-tripel build/visionscarto-winkel-tripel --scale 2
 
 
 ### PROJECTIONS BIZARRES
 
 larrivee: ## projection larrivee
-	./bin/screenshot.js file://`pwd`/fond.html?projection=larrivee build/visionscarto-larrivee 2
+	./bin/screenshot.js file://`pwd`/fond.html?projection=larrivee build/visionscarto-larrivee --scale 2
 
 bottomley: ## projection bottomley
-	./bin/screenshot.js file://`pwd`/fond.html?projection=bottomley build/visionscarto-bottomley 2
+	./bin/screenshot.js file://`pwd`/fond.html?projection=bottomley build/visionscarto-bottomley --scale 2
 
 gallpeters: ## projection gall-peters
-	./bin/screenshot.js file://`pwd`/fond.html?projection=gallpeters build/visionscarto-gallpeters 2
+	./bin/screenshot.js file://`pwd`/fond.html?projection=gallpeters build/visionscarto-gallpeters --scale 2
 
 timesus: ## projection Times centrée sur les US
-	./bin/screenshot.js file://`pwd`/fond.html?projection=timesus build/visionscarto-timesus 2
+	./bin/screenshot.js file://`pwd`/fond.html?projection=timesus build/visionscarto-timesus --scale 2
 
 
 optim: optim-svg optim-png ## optimize all images

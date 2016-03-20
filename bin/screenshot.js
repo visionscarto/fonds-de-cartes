@@ -5,7 +5,7 @@ var env = system.env;
 
 
 function usage() {
-    return args[0] + ' [url] [dest]';
+    return args[0] + ' [url] [dest] --help --wait [w] --scale [s]';
 }
 
 
@@ -13,39 +13,43 @@ function usage() {
 // sudo npm install -g optparse
 var optparse = require('/usr/local/lib/node_modules/optparse/lib/optparse');
 var switches = [
-    ['-h', '--help', 'Shows help sections']
+    ['-h', '--help', 'Shows help sections'],
+    ['-w', '--wait NUMBER', 'Wait w seconds'],
+    ['-s', '--scale NUMBER', 'Scale by s'],
 ];
 var parser = new optparse.OptionParser(switches);
+
+var args = require('system').args;
 
 parser.on('help', function() {
     console.log(usage());
     phantom.exit();
 });
 
+var wait = 1;
+parser.on('wait', function(opt, n) {
+    wait = parseInt(n);
+});
 
+var scale = 1;
+parser.on('scale', function(opt, n) {
+    scale = parseFloat(n);
+});
 
+var url = false, dest = false;
+parser.on(1, function(opt) {
+    url = opt;
+    if (!url.match(/^(file|https?):\/\//)) {
+        url = 'http://' + url;
+    }
+    dest = env.HOME + '/Dropbox/screenshots/' + url.replace(/[.:\/]/g, '-');
+});
 
-// PDF ou JPG ont une qualité inférieure
-var args = require('system').args,
-    url = args[1];
+parser.on(2, function(opt, n) {
+    dest = opt;
+});
 
 parser.parse(args);
-
-if (!url) {
-    console.log(usage());
-    phantom.exit();
-}
-
-var dest = args[2] || env['HOME'] + '/Dropbox/screenshots/' + url.replace(/[.:\/]/g, '-'),
-    scale = eval(args[3]) || 1,
-    secs = 1;
-
-
-
-
-if (!url.match(/^(file|https?):\/\//)) {
-    url = 'http://' + url;
-}
 
 var page = require('webpage').create();
 
@@ -68,7 +72,7 @@ page.open(url,
 
 
         // attendre 1seconde pour d3.legend()
-        console.log('sleeping for ' + secs + 's');
+        console.log('wait ' + wait + 's');
         setTimeout(function () {
             console.log('saving ' + url + ' at scale ' + scale + ' as ' + dest);
 
@@ -99,7 +103,7 @@ page.open(url,
                 i++;
             });
             phantom.exit();
-        }, secs * 1000);
+        }, wait * 1000);
 
     });
 
