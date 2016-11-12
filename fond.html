@@ -406,6 +406,9 @@
                     .attr('class', function (d) {
                         return 'population ' + (d.properties.GU_A3);
                     })
+                    .attr('data-population', function (d) {
+                        return d.pop;
+                    })
                     .attr({
                         cx: function (d) {
                             return d.xy[0];
@@ -451,6 +454,9 @@
                     .append('rect')
                     .attr('class', function (d) {
                         return 'gdp ' + (d.properties.GU_A3);
+                    })
+                    .attr('data-gdp', function (d) {
+                        return d.gdp;
                     })
                     .attr({
                         x: function (d) {
