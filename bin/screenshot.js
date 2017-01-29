@@ -5,7 +5,7 @@ var env = system.env;
 
 
 function usage() {
-    return args[0] + ' [url] [dest] --help --wait [w] --scale [s]';
+    return args[0] + ' [url] [dest] --help --wait [w] --scale [s] --format [png,pdf] --optim';
 }
 
 
@@ -15,7 +15,9 @@ var optparse = require('/usr/local/lib/node_modules/optparse/lib/optparse');
 var switches = [
     ['-h', '--help', 'Shows help sections'],
     ['-w', '--wait NUMBER', 'Wait w seconds'],
+    ['-f', '--format [png]', 'Export format (png, pdf, svg)'],
     ['-s', '--scale NUMBER', 'Scale by s'],
+    ['-p', '--optim', 'Optimize file'],
 ];
 var parser = new optparse.OptionParser(switches);
 
@@ -36,6 +38,20 @@ parser.on('scale', function(opt, n) {
     scale = parseFloat(n);
 });
 
+var optim = false;
+parser.on('optim', function(opt, n) {
+    optim = true;
+});
+
+var format = 'png';
+parser.on('format', function(opt, n) {
+    if ("png pdf".split(/ /).indexOf(n) == -1) {
+        console.log('Wrong format:', n);
+    } else {
+        format = n;
+    }
+});
+
 var url = false, dest = false;
 parser.on(1, function(opt) {
     url = opt;
@@ -47,6 +63,11 @@ parser.on(1, function(opt) {
 
 parser.on(2, function(opt, n) {
     dest = opt;
+    var m = dest.match(/^(.*)[.](png|pdf|svg)$/);
+    if (m) {
+        dest = m[1];
+        format = m[2];
+    }
 });
 
 parser.parse(args);
@@ -54,7 +75,7 @@ parser.parse(args);
 var page = require('webpage').create();
 
 // donner une hauteur importante pour forcer lazyload
-// page.viewportSize = { width: 1024, height: 2768 };
+//page.viewportSize = { width: 1024, height: 400 };
 
 console.log('loading ' + url);
 page.open(url,
@@ -74,10 +95,9 @@ page.open(url,
         // attendre 1seconde pour d3.legend()
         console.log('wait ' + wait + 's');
         setTimeout(function () {
-            console.log('saving ' + url + ' at scale ' + scale + ' as ' + dest);
+            console.log('saving ' + url + ' at scale ' + scale + ' as ' + dest + '.' + format);
 
-            page.render(dest + '.png');
-
+            if (format == 'svg') {
             var a = page.evaluate(function() {
                 var res = [ document.all[0].outerHTML ];
 
@@ -102,15 +122,34 @@ page.open(url,
                 saveas('<?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">' + svg, dest + (i>0 ? i : '') + '.svg');
                 i++;
             });
+            }
+
+            else {
+            // evacuer un bug sur stroke-dasharray
+            page.evaluate(function() {
+                (typeof d3 != 'undefined') && d3.selectAll('.fixdasharray')
+                .each(function(d) {
+                    var me = d3.select(this);
+                    if (me.attr('stroke-width') && +me.attr('stroke-width') < 1) {
+                        me.attr({
+                            opacity: +me.attr('stroke-width'),
+                            'stroke-width': 1,
+                        });
+                    }
+                });
+            });
+            page.render(dest + '.' + format);
+
             phantom.exit();
+            }
         }, wait * 1000);
 
     });
 
 
 function saveas(content, path) {
-	var fs = require('fs');
-	fs.write(path, content, 'w');
+    var fs = require('fs');
+    fs.write(path, content, 'w');
 }
 
 
