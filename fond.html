@@ -80,10 +80,9 @@
         </defs>
     </svg>
 
-    <script src="./lib/d3.v3.min.js"></script>
-    <script src="./lib/d3.geo.projection.v0.min.js"></script>
-    <script src="./lib/topojson.v1.min.js"></script>
-    <script src="./lib/queue.v1.min.js"></script>
+    <script src="./lib/d3.v4.min.js"></script>
+    <script src="./lib/d3-geo-projection.v2.min.js"></script>
+    <script src="./lib/topojson.v2.min.js"></script>
     <script src="./lib/d3.geo.projection.visionscarto.js"></script>
 
     <script>
@@ -104,41 +103,41 @@
 
         switch (pj) {
         case 'bertin1953':
-            projection = d3.geo.visionscarto()
+            projection = d3.geoBertin1953()
                 .scale(169)
                 .translate([300, 236]);
             laius_projection = 'Projection créée par Philippe Rivière d’après Jacques Bertin (1953).';
             break;
         case 'robinson':
-            projection = d3.geo.robinson()
+            projection = d3.geoRobinson()
                 .translate([324, 245])
                 .scale(128)
                 .rotate([-10.23]);
             laius_projection = 'Projection d’Arthur H. Robinson (1963).';
             break;
         case 'larrivee':
-            projection = d3.geo.larrivee()
+            projection = d3.geoLarrivee()
                 .translate([340, 255])
                 .scale(121)
                 .rotate([-10.23]);
             laius_projection = 'Projection de Léo Larrivée (1988).';
             break;
         case 'bottomley':
-            projection = d3.geo.bottomley()
+            projection = d3.geoBottomley()
                 .translate([287, 265])
                 .scale(152)
                 .rotate([-10.23]);
             laius_projection = 'Projection d’Henry Bottomley (2003).';
             break;
         case 'winkel-tripel':
-            projection = d3.geo.winkel3()
+            projection = d3.geoWinkel3()
                 .translate([314, 250])
                 .scale(160)
                 .rotate([-10.23]);
             laius_projection = 'Projection d’Oswald Winkel, dite Winkel-Tripel (1921).';
             break;
         case 'gallpeters':
-            projection = d3.geo.cylindricalEqualArea()
+            projection = d3.geoCylindricalEqualArea()
                 .parallel(45)
                 .translate([348, 240])
                 .scale(154)
@@ -146,7 +145,7 @@
             laius_projection = 'Projection de James Gall (1855), popularisée par Arno Peters.';
             break;
         case 'waterman':
-            projection = d3.geo.polyhedron.waterman()
+            projection = d3.geoPolyhedronWaterman()
                 .rotate([25, -2])
                 .scale(118)
                 .translate([200, 200])
@@ -154,7 +153,7 @@
             laius_projection = 'Projection de Waterman.';
             break;
         case 'timesus':
-            projection = d3.geo.times()
+            projection = d3.geoTimes()
                 .rotate([117,-5])
                 .scale(151)
                 .translate([347, 257])
@@ -162,9 +161,9 @@
             laius_projection = 'Projection “Times” centrée sur les États-Unis.';
             break;
         default:
-            if (pj in d3.geo) {
-                projection = d3.geo[pj]();
-                laius_projection = 'Projection : ' + pj + '.';
+            if (pj in d3) {
+                projection = d3[pj]();
+                laius_projection = 'Projection : ' + pj.replace(/^geo/, '') + '.';
             } else {
                 alert('projection ' + pj + ' inconnue');
                 projection = null;
@@ -187,7 +186,7 @@
         var width = 700,
             height = 475;
 
-        var path = d3.geo.path()
+        var path = d3.geoPath()
             .projection(projection);
 
         var svg = d3.select("svg")
@@ -198,20 +197,18 @@
 
         var bg = svg
             .append('rect')
-            .attr({
-                id: 'background',
-                x: 2,
-                y: 2,
-                width: width - 8,
-                height: height - 5,
-            });
+            .attr('id', 'background')
+            .attr('x', 2)
+            .attr('y', 2)
+            .attr('width', width - 8)
+            .attr('height', height - 5);
 
         var world = svg.append('g')
             .attr('id', 'world');
 
-        graphsignature([' ', ' ', ' '], ['Visionscarto', '2016'], laius);
+        graphsignature([' ', ' ', ' '], ['Visionscarto', '2017'], laius);
 
-        queue()
+        d3.queue()
             .defer(d3.json, topo)
             .defer(d3.csv, './data/capitals.csv')
             .defer(d3.csv, './data/island-nations.csv')
@@ -244,12 +241,11 @@
                 )
                     .enter()
                     .append('path')
-                    .attr({
-                        class: 'continent',
-                        id: function (d) {
+                    .attr('class', 'continent')
+                    .attr('id', function (d) {
                             return d;
-                        },
-                        d: function (d) {
+                        })
+                    .attr('d', function (d) {
                             return path(
                                 topojson.merge(wjson,
                                     countries.geometries
@@ -258,8 +254,7 @@
                                     })
                                 )
                             );
-                        },
-                    });
+                        });
 
 
                 world.append('g')
@@ -280,27 +275,22 @@
                     .datum(topojson.mesh(wjson, countries, function (a, b) {
                         return a !== b;
                     }))
-                    .attr({
-                        class: 'border',
-                        id: 'borders',
-                        d: path
-                    });
+                    .attr('class', 'border')
+                    .attr('id', 'borders')
+                    .attr('d', path);
+
                 world.append('path')
                     .datum(topojson.mesh(wjson, countries, function (a, b) {
                         return a == b;
                     }))
-                    .attr({
-                        class: 'coast',
-                        id: 'coasts',
-                        d: path
-                    });
+                    .attr('class', 'coast')
+                    .attr('id', 'coasts')
+                    .attr('d', path);
 
 
                 // ISLAND NATIONS
                 var isl = world.append('g')
-                    .attr({
-                        id: 'island-nations',
-                    });
+                    .attr('id', 'island-nations');
 
                 isl.selectAll('circle')
                     .data(
@@ -318,28 +308,24 @@
                 )
                     .enter()
                     .append('circle')
-                    .attr({
-                        id: function (d) {
+                    .attr('id', function (d) {
                             return d.id + ' ' + d.name;
-                        },
-                        cx: function (d) {
+                        })
+                    .attr('cx', function (d) {
                             return d.x;
-                        },
-                        cy: function (d) {
+                        })
+                    .attr('cy', function (d) {
                             return d.y;
-                        },
-                        class: function (d) {
+                        })
+                    .attr('class', function (d) {
                             return d.id + ' ' + 'country-island';
-                        },
-                        r: '0.25mm',
-                    });
+                        })
+                    .attr('r', '0.25mm');
 
 
                 // CAPITALS
                 var cap = world.append('g')
-                    .attr({
-                        id: 'capitals',
-                    });
+                    .attr('id', 'capitals');
 
                 cap.selectAll('rect')
                     .data(
@@ -357,23 +343,19 @@
                 )
                     .enter()
                     .append('g')
-                    .attr({
-                        id: function (d) {
+                    .attr('id', function (d) {
                             return d.id + ' ' + d.capital;
-                        },
-                        class: function (d) {
+                        })
+                    .attr('class', function (d) {
                             return 'capital ' + d.id;
-                        },
-                        transform: function (d) {
+                        })
+                    .attr('transform', function (d) {
                             return 'translate(' + d.x + ',' + d.y + ')';
-                        },
                     })
                     .append('rect')
-                    .attr({
-                        width: '0.4mm',
-                        height: '0.4mm',
-                        transform: 'translate(-0.5, -0.5)',
-                    });
+                    .attr('width', '0.4mm')
+                    .attr('height', '0.4mm')
+                    .attr('transform', 'translate(-0.5, -0.5)');
 
 
                 // POPULATION
@@ -391,7 +373,7 @@
                         return d3.descending(a.pop, b.pop);
                     })
 
-                var pop_scale = d3.scale.sqrt()
+                var pop_scale = d3.scaleSqrt()
                     .domain([0, d3.max(data, function (d) {
                         return d.pop;
                     })])
@@ -409,17 +391,15 @@
                     .attr('data-population', function (d) {
                         return d.pop;
                     })
-                    .attr({
-                        cx: function (d) {
+                    .attr('cx', function (d) {
                             return d.xy[0];
-                        },
-                        cy: function (d) {
+                        })
+                    .attr('cy', function (d) {
                             return d.xy[1];
-                        },
-                        r: function (d) {
+                        })
+                    .attr('r', function (d) {
                             return pop_scale(d.pop);
-                        },
-                    })
+                        })
                     .attr('id', function (d) {
                         return d.properties.GU_A3 + ' ' + d.properties.NAME;
                     });
@@ -440,7 +420,7 @@
                         return d3.descending(a.gdp, b.gdp);
                     })
 
-                var gdp_scale = d3.scale.sqrt()
+                var gdp_scale = d3.scaleSqrt()
                     .domain([0, d3.max(data, function (d) {
                         return d.gdp;
                     })])
@@ -458,24 +438,22 @@
                     .attr('data-gdp', function (d) {
                         return d.gdp;
                     })
-                    .attr({
-                        x: function (d) {
+                    .attr('x', function (d) {
                             return d.xy[0];
-                        },
-                        y: function (d) {
+                        })
+                    .attr('y', function (d) {
                             return d.xy[1];
-                        },
-                        width: function (d) {
+                        })
+                    .attr('width', function (d) {
                             return gdp_scale(d.gdp);
-                        },
-                        height: function (d) {
+                        })
+                    .attr('height', function (d) {
                             return gdp_scale(d.gdp);
-                        },
-                        transform: function (d) {
+                        })
+                    .attr('transform', function (d) {
                             var x = -gdp_scale(d.gdp) / 2;
                             return 'translate(' + x + ',' + x + ')';
-                        }
-                    })
+                        })
                     .attr('id', function (d) {
                         return d.properties.GU_A3 + ' ' + d.properties.NAME;
                     });
@@ -492,13 +470,11 @@
                 .attr('id', 'signature');
 
             sig.append('rect')
-                .attr({
-                    id: 'frame',
-                    x: 2,
-                    y: 2,
-                    width: width - 8,
-                    height: height - 5,
-                });
+                .attr('id', 'frame')
+                .attr('x', 2)
+                .attr('y', 2)
+                .attr('width', width - 8)
+                .attr('height', height - 5);
 
             var gtitre = sig.append('g').attr('id', 'title');
             var size = 36;
@@ -507,14 +483,12 @@
                 .data(titre)
                 .enter()
                 .append('text')
-                .attr({
-                    y: function (d, i) {
+                .attr('y', function (d, i) {
                         return (size + 4) * i;
-                    },
-                    transform: 'translate(' + [width - 14, size] + ')',
-                    fill: 'black',
-                    'text-anchor': 'end',
-                })
+                    })
+                .attr('transform', 'translate(' + [width - 14, size] + ')')
+                .attr('fill', 'black')
+                .attr('text-anchor', 'end')
                 .style("font-size", size + 'px')
                 .text(function (d) {
                     return d;
@@ -537,11 +511,9 @@
                     return d.toUpperCase();
                 });
 
-            var bbox = gsignature[0][0].getBBox();
+            var bbox = gsignature.node().getBBox();
             gsignature
-                .attr({
-                    transform: 'translate(' + [width - bbox.width / 2 - 14, height - bbox.height - 2] + ')',
-                });
+                .attr('transform', 'translate(' + [width - bbox.width / 2 - 14, height - bbox.height - 2] + ')');
 
 
             gsignature
@@ -549,16 +521,14 @@
                 .data(lignes.slice(1))
                 .enter()
                 .append('line')
-                .attr({
-                    x1: -bbox.width / 2,
-                    x2: bbox.width / 2,
-                    y1: function (d, i) {
+                .attr('x1', -bbox.width / 2)
+                .attr('x2', bbox.width / 2)
+                .attr('y1', function (d, i) {
                         return 14 * i + 4;
-                    },
-                    y2: function (d, i) {
+                    })
+                .attr('y2', function (d, i) {
                         return 14 * i + 4;
-                    }
-                })
+                    })
                 .attr("stroke", "black");
 
             if (laius) {
@@ -569,11 +539,9 @@
                     .data(laius)
                     .enter()
                     .append('tspan')
-                    .attr({
-                        x: 0,
-                        y: function (d, i) {
-                            return 10 * i;
-                        },
+                    .attr('x', 0)
+                    .attr('y', function (d, i) {
+                        return 10 * i;
                     })
                     .attr("fill", "black")
                     .attr("text-anchor", "start")
@@ -582,11 +550,9 @@
                         return d;
                     });
 
-                var bbox = glaius[0][0].getBBox();
+                var bbox = glaius.node().getBBox();
                 glaius
-                    .attr({
-                        transform: 'translate(' + [12, height - bbox.height - 4] + ')',
-                    });
+                    .attr('transform', 'translate(' + [12, height - bbox.height - 4] + ')');
 
             }
 

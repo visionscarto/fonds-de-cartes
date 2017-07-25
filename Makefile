@@ -13,11 +13,13 @@ init: ## create build/ directory
 
 ## pour simplifier un peu : 0.00005
 topo: ## create build/countries.topo.json
-	topojson --properties \
-	--id-property id \
-	--simplify 0.00001 \
-	-- data/countries.geojson > build/countries.topo.json
-
+	cat data/countries.geojson \
+	| geostitch \
+	| geoproject -p 2 'd3.geoIdentity()' \
+	| geo2topo countries=- \
+	| topoquantize 2000 \
+	| toposimplify -s 0.00001 \
+	> build/countries.topo.json
 
 ### PROJECTIONS
 
@@ -49,7 +51,8 @@ timesus: ## projection Times centrée sur les US
 optim: optim-svg optim-png ## optimize all images
 
 optim-png: ## optimize PNG
-	imageOptim --directory build/
+	optipng build/*.png
+	#pngquant --ext .png --force build/*.png
 
 optim-svg: ## optimize SVG
 	svgo --precision=2 --disable=removeUnknownsAndDefaults --disable=removeXMLProcInst build/
