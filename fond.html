@@ -33,6 +33,28 @@
                 .continents {
                     fill: #eee;
                 }
+                .globe {
+                    display: none;
+                }
+                #countries .ATA, #countries .ATF {
+                    display: none;
+                }
+                #Antarctica {
+                    display: none;
+                    stroke: #555;
+                    stroke-width: 0.2mm;
+                    stroke-linecap: round;
+                }
+                .sphere {
+                    fill: none;
+                    stroke: #999;
+                    stroke-width: 0.15mm;
+                }
+                .graticule {
+                    fill: none;
+                    stroke: #999;
+                    stroke-width: 0.05mm;
+                }
                 .land {
                     fill: #999;
                 }
@@ -229,25 +251,43 @@
 
                 var countries = wjson.objects.countries;
                 countries.geometries = countries.geometries
-                    .filter(function (d) {
-                    	if (!d.properties) return true;
-                        return ['ATA', 'ATF'].indexOf(d.properties.iso_a3) < 0;
-                    })
                     .sort(function (a, b) {
-                    	if (!a.properties) return 0;
+                        if (!a.properties) return 0;
                         return (
                             a.properties.name_sort,
                             b.properties.name_sort
                         );
                     });
 
-                world.append('g')
+                var globe = world.append('g')
+                    .attr('id', 'globe')
+                    .attr('class', 'globe')
+
+                globe.append('g')
                     .attr('class', 'land')
                     .attr('id', 'land')
                     .append('path')
                     .attr('class', 'land')
-                    .datum(topojson.merge(wjson, wjson.objects.countries.geometries))
-	                .attr('d', path);
+                    .datum(topojson.merge(wjson, wjson.objects.countries.geometries
+                        .filter(function(d) { return !is_antarctica(d); })
+                    ))
+                    .attr('d', path);
+
+                globe.append('g')
+                    .attr('class', 'graticule')
+                    .attr('id', 'graticule')
+                    .append('path')
+                    .attr('class', 'graticule')
+                    .datum(d3.geoGraticule())
+                    .attr('d', path);
+
+                globe.append('g')
+                    .attr('class', 'sphere')
+                    .attr('id', 'sphere')
+                    .append('path')
+                    .attr('class', 'sphere')
+                    .datum({type: "Sphere"})
+                    .attr('d', path);
 
                 world.append('g')
                     .attr('class', 'continents')
@@ -298,6 +338,11 @@
                     .attr('class', 'border')
                     .attr('id', 'borders')
                     .attr('d', path);
+
+
+                countries.geometries = countries.geometries.filter(function(d) {
+                    return !is_antarctica(d);
+                });
 
                 world.append('path')
                     .datum(topojson.mesh(wjson, countries, function (a, b) {
@@ -577,4 +622,10 @@
             }
 
         }
+
+        function is_antarctica(d) {
+            if (!d.properties) return false;
+            return ['ATA', 'ATF'].indexOf(d.properties.iso_a3) > -1;
+        };
+
     </script>

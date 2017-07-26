@@ -8,7 +8,7 @@
 
 - Frontières : [Natural Earth, corrigée Visionscarto](https://github.com/Fil/ne_110m_fixes)
 
-- Graticule, Équateur, tropiques, ligne de changement d’heure : [Natural Earth via http://geojson.xyz/](http://geojson.xyz/)
+<!-- - Graticule, Équateur, tropiques, ligne de changement d’heure : [Natural Earth via http://geojson.xyz/](http://geojson.xyz/) -->
 
 
 ### Projections
