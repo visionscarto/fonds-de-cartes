@@ -41,6 +41,9 @@ topo: toporefine
 bertin1953: ## projection bertin 1953
 	./bin/screenshot.js file://`pwd`/fond.html?projection=bertin1953 build/visionscarto-bertin1953 2
 
+equirectangular: ## projection equirectangular
+	./bin/screenshot.js file://`pwd`/fond.html?projection=equirectangular build/visionscarto-equirectangular 2
+
 robinson: ## projection robinson
 	./bin/screenshot.js file://`pwd`/fond.html?projection=robinson build/visionscarto-robinson 2
 

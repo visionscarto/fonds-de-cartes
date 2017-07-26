@@ -108,6 +108,13 @@
                 .translate([300, 236]);
             laius_projection = 'Projection créée par Philippe Rivière d’après Jacques Bertin (1953).';
             break;
+        case 'equirectangular':
+            projection = d3.geoEquirectangular()
+                .scale(110)
+                .translate([348, 475/2])
+                .rotate([-10.23]);
+            laius_projection = 'Projection Plate-Carrée (équirectangulaire), attribuée à Marinus de Tyr (100 ap. JC).';
+            break;
         case 'robinson':
             projection = d3.geoRobinson()
                 .translate([324, 245])
