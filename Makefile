@@ -14,7 +14,7 @@ init: ## create build/ directory
 ## pour simplifier un peu : 0.00005
 ## npm install -g topojson@3.0.0
 topo3: ## create build/countries.topo.json
-	cat data/countries.geo.json \
+	cat data/countries-110m.geojson \
 	| geostitch \
 	| geoproject -p 4 'd3.geoIdentity()' \
 	| geo2topo countries=- \
@@ -31,10 +31,11 @@ toporefine: ## create build/countries.topo.json
 topo1: ## create build/countries.topo.json
 	topojson --properties \
        --id-property id \
-       --simplify 0 \
-       -- data/countries.geojson > data/countries.topo.json
+       --simplify 0.00005 \
+       countries=- \
+       < data/countries-110m.geojson > build/countries.topo.json
 
-topo: toporefine
+topo: topo1
 
 ### PROJECTIONS
 

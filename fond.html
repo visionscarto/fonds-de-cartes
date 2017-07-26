@@ -227,9 +227,11 @@
                 var countries = wjson.objects.countries;
                 countries.geometries = countries.geometries
                     .filter(function (d) {
+                    	if (!d.properties) return true;
                         return ['ATA', 'ATF'].indexOf(d.properties.iso_a3) < 0;
                     })
                     .sort(function (a, b) {
+                    	if (!a.properties) return 0;
                         return (
                             a.properties.name_sort,
                             b.properties.name_sort
@@ -242,7 +244,7 @@
                     .selectAll('.continent')
                     .data(
                         d3.set(countries.geometries.map(function (d) {
-                            return d.properties.continent;
+                            return d.properties && d.properties.continent;
                         }))
                         .values()
                 )
@@ -257,7 +259,7 @@
                                 topojson.merge(wjson,
                                     countries.geometries
                                     .filter(function (e) {
-                                        return e.properties.continent == d;
+                                        return !e.properties || e.properties.continent == d;
                                     })
                                 )
                             );
