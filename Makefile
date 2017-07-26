@@ -1,8 +1,8 @@
-all: data fonds ## data & fonds de cartes
+all: init fonds ## data & fonds de cartes
 
 fonds: bertin1953 robinson winkel-tripel optim ## fonds de cartes standards
 
-fonds-bizarres: larrivee bottomley gallpeters ## fonds de cartes bizarres
+fonds-bizarres: equirectangular larrivee bottomley gallpeters ## fonds de cartes bizarres
 
 
 ### DATA

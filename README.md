@@ -1,6 +1,6 @@
 # Fonds de cartes
 
-![](images/visionscarto-bertin1953-alpha2-simple.png)
+![](images/visionscarto-bertin1953-simple.png)
 
 ## Sources
 

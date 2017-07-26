@@ -33,6 +33,9 @@
                 .continents {
                     fill: #eee;
                 }
+                .land {
+                    fill: #999;
+                }
                 .capital {
                     stroke: #000;
                     stroke-width: 0.15mm;
@@ -237,6 +240,14 @@
                             b.properties.name_sort
                         );
                     });
+
+                world.append('g')
+                    .attr('class', 'land')
+                    .attr('id', 'land')
+                    .append('path')
+                    .attr('class', 'land')
+                    .datum(topojson.merge(wjson, wjson.objects.countries.geometries))
+	                .attr('d', path);
 
                 world.append('g')
                     .attr('class', 'continents')
