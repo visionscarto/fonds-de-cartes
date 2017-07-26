@@ -29,5 +29,5 @@
 - [D3 extended projections](https://github.com/d3/d3-geo-projection)
 - [PhantomJS](http://phantomjs.org/)
 - [svgo](https://github.com/svg/svgo)
-- [imageOptim](http://jamiemason.github.io/ImageOptim-CLI/)
+- [optipng](http://optipng.sourceforge.net/)
 
