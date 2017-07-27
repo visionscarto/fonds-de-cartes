@@ -33,22 +33,10 @@
                 .continents {
                     fill: #eee;
                 }
-                .globe {
-                    display: none;
-                }
-                #countries .ATA, #countries .ATF {
-                    display: none;
-                }
-                #Antarctica {
-                    display: none;
-                    stroke: #555;
-                    stroke-width: 0.2mm;
-                    stroke-linecap: round;
-                }
                 .sphere {
                     fill: none;
                     stroke: #999;
-                    stroke-width: 0.15mm;
+                    stroke-width: 0.30mm;
                 }
                 .graticule {
                     fill: none;
@@ -124,7 +112,10 @@
             projection = null,
             laius_projection = '',
             pj = param('projection', 'robinson'),
-            rotate = param('rotate', null);
+            rotate = [+param('rotate', -10.23)],
+            show_graticule = param('graticule', false),
+            show_ata = param('antarctica', false),
+            clipPath = param('clip') ? 'url(#clip)' : false;
 
         switch (pj) {
         case 'bertin1953':
@@ -137,35 +128,51 @@
             projection = d3.geoEquirectangular()
                 .scale(110)
                 .translate([348, 475/2])
-                .rotate([-10.23]);
+                .rotate(rotate);
             laius_projection = 'Projection plate carrée (équirectangulaire), attribuée à Marinus de Tyr (100 ap. JC).';
+            break;
+        case 'northpole':
+            projection = d3.geoAzimuthalEqualArea()
+                .scale(354)
+                .translate([350, 240])
+                .rotate([0, -90, 112])
+                .clipExtent([[2,2], [693, 471]]);
+            laius_projection = 'Projection azimutale équivalente.';
+            break;
+        case 'southpole':
+            projection = d3.geoAzimuthalEqualArea()
+                .scale(354)
+                .translate([350, 240])
+                .rotate([0, 90, 222])
+                .clipExtent([[2,2], [693, 471]]);
+            laius_projection = 'Projection azimutale équivalente.';
             break;
         case 'robinson':
             projection = d3.geoRobinson()
                 .translate([324, 245])
                 .scale(128)
-                .rotate([-10.23]);
+                .rotate(rotate);
             laius_projection = 'Projection d’Arthur H. Robinson (1963).';
             break;
         case 'larrivee':
             projection = d3.geoLarrivee()
-                .translate([340, 255])
+                .translate([335, 255])
                 .scale(121)
-                .rotate([-10.23]);
+                .rotate(rotate);
             laius_projection = 'Projection de Léo Larrivée (1988).';
             break;
         case 'bottomley':
             projection = d3.geoBottomley()
                 .translate([287, 265])
                 .scale(152)
-                .rotate([-10.23]);
+                .rotate(rotate);
             laius_projection = 'Projection d’Henry Bottomley (2003).';
             break;
         case 'winkel-tripel':
             projection = d3.geoWinkel3()
                 .translate([314, 250])
                 .scale(160)
-                .rotate([-10.23]);
+                .rotate(rotate);
             laius_projection = 'Projection d’Oswald Winkel, dite Winkel-Tripel (1921).';
             break;
         case 'gallpeters':
@@ -173,28 +180,35 @@
                 .parallel(45)
                 .translate([348, 240])
                 .scale(154)
-                .rotate([-10.23]);
+                .rotate(rotate);
             laius_projection = 'Projection de James Gall (1855), popularisée par Arno Peters.';
+            break;
+        case 'gingery':
+            projection = d3.geoGingery()
+                .rotate(rotate)
+                .fitExtent([[2,2], [693, 471]], {type:"Sphere"});
+            laius_projection = 'Projection créée par Jason Davies, d’après Walter Gingery (1944).';
             break;
         case 'waterman':
             projection = d3.geoPolyhedronWaterman()
                 .rotate([25, -2])
                 .scale(118)
-                .translate([200, 200])
-                .precision(.1);
+                .translate([200, 200]);
             laius_projection = 'Projection de Waterman.';
             break;
         case 'timesus':
             projection = d3.geoTimes()
                 .rotate([117,-5])
                 .scale(151)
-                .translate([347, 257])
-                .precision(.1);
+                .translate([347, 257]);
             laius_projection = 'Projection “Times” centrée sur les États-Unis.';
             break;
         default:
+        	pj = 'geo' + pj.replace(/^geo/, '');
             if (pj in d3) {
                 projection = d3[pj]();
+                projection
+                	.fitExtent([[2,2], [693, 471]], {type:"Sphere"});
                 laius_projection = 'Projection : ' + pj.replace(/^geo/, '') + '.';
             } else {
                 alert('projection ' + pj + ' inconnue');
@@ -203,6 +217,10 @@
             break;
         }
 
+        if (projection.rotate && projection.rotate()+'' == [0,0,0]+'')
+            projection.rotate(rotate);
+
+        if (projection && projection.precision) projection.precision(0.001);
 
         var laius = [
           laius_projection,
@@ -210,10 +228,6 @@
           'Gratuit et libre pour tous usages.',
           'Nous aimons les cartes, partageons-les !  contact@visionscarto.net'
         ];
-
-        if (rotate) {
-            projection.rotate([parseFloat(rotate)]);
-        }
 
         var width = 700,
             height = 475;
@@ -225,6 +239,32 @@
             .attr("width", width)
             .attr("height", height)
             .attr('id', 'base map');
+
+		var defs = svg.append('defs');
+
+		if (!show_ata) {
+			defs
+			.append('style')
+			.attr('type', 'text/css')
+			.text("#countries .ATA, #countries .ATF { display: none; } #Antarctica { display: none; stroke: #555; stroke-width: 0.2mm; stroke-linecap: round; }");
+			is_antarctica = function (d) {
+	            if (!d.properties) return false;
+	            return ['ATA', 'ATF'].indexOf(d.properties.iso_a3) > -1;
+	        };
+		} else {
+	        is_antarctica = function(d) { return false; };
+		}
+
+		// clip to sphere?
+		defs.append("path")
+            .datum({type: "Sphere"})
+            .attr("id", "sphere")
+            .attr("d", path);
+
+        defs.append("clipPath")
+            .attr("id", "clip")
+            .append("use")
+            .attr("xlink:href", "#sphere");
 
 
         var bg = svg
@@ -262,12 +302,14 @@
                 var globe = world.append('g')
                     .attr('id', 'globe')
                     .attr('class', 'globe')
+                    .style('display', show_graticule ? null : 'none');
 
                 globe.append('g')
                     .attr('class', 'land')
                     .attr('id', 'land')
                     .append('path')
                     .attr('class', 'land')
+                    .attr('clip-path', clipPath)
                     .datum(topojson.merge(wjson, wjson.objects.countries.geometries
                         .filter(function(d) { return !is_antarctica(d); })
                     ))
@@ -278,16 +320,14 @@
                     .attr('id', 'graticule')
                     .append('path')
                     .attr('class', 'graticule')
+                    .attr('clip-path', clipPath)
                     .datum(d3.geoGraticule())
                     .attr('d', path);
 
-                globe.append('g')
+                globe.append('use')
                     .attr('class', 'sphere')
                     .attr('id', 'sphere')
-                    .append('path')
-                    .attr('class', 'sphere')
-                    .datum({type: "Sphere"})
-                    .attr('d', path);
+                    .attr("xlink:href", "#sphere");
 
                 world.append('g')
                     .attr('class', 'continents')
@@ -302,6 +342,7 @@
                     .enter()
                     .append('path')
                     .attr('class', 'continent')
+                    .attr('clip-path', clipPath)
                     .attr('id', function (d) {
                             return d;
                         })
@@ -327,6 +368,7 @@
                         return 'country ' + class_iso_a3(d.properties);
                     })
                     .attr("d", path)
+                    .attr('clip-path', clipPath)
                     .attr('id', function (d) {
                         return class_iso_a3(d.properties) + ' ' + d.properties.name;
                     });
@@ -337,7 +379,8 @@
                     }))
                     .attr('class', 'border')
                     .attr('id', 'borders')
-                    .attr('d', path);
+                    .attr('d', path)
+                    .attr('clip-path', clipPath);
 
 
                 countries.geometries = countries.geometries.filter(function(d) {
@@ -350,7 +393,8 @@
                     }))
                     .attr('class', 'coast')
                     .attr('id', 'coasts')
-                    .attr('d', path);
+                    .attr('d', path)
+                    .attr('clip-path', clipPath);
 
 
                 // ISLAND NATIONS
@@ -622,10 +666,5 @@
             }
 
         }
-
-        function is_antarctica(d) {
-            if (!d.properties) return false;
-            return ['ATA', 'ATF'].indexOf(d.properties.iso_a3) > -1;
-        };
 
     </script>
