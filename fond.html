@@ -12,7 +12,11 @@
 
 <body>
 
-    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <svg version="1.1"
+    	xmlns="http://www.w3.org/2000/svg"
+    	xmlns:xlink="http://www.w3.org/1999/xlink"
+    	xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+    >
         <defs>
             <style type="text/css">
                 .country {
@@ -20,56 +24,56 @@
                 }
                 .coast {
                     fill: none;
-                    stroke: #555;
+                    stroke: #555555;
                     stroke-width: 0.2mm;
                     stroke-linecap: round;
                 }
-                .border {
+                .borders {
                     fill: none;
-                    stroke: #555;
+                    stroke: #555555;
                     stroke-width: 0.15mm;
                     stroke-linecap: round;
                 }
                 .continents {
-                    fill: #eee;
+                    fill: #eeeeee;
                 }
                 .sphere {
                     fill: none;
-                    stroke: #999;
+                    stroke: #999999;
                     stroke-width: 0.30mm;
                 }
                 .graticule {
                     fill: none;
-                    stroke: #999;
+                    stroke: #999999;
                     stroke-width: 0.05mm;
                 }
                 .land {
-                    fill: #999;
+                    fill: #999999;
                 }
                 .capital {
-                    stroke: #000;
+                    stroke: #000000;
                     stroke-width: 0.15mm;
                     fill: white;
                 }
                 .country-island {
-                    stroke: #555;
+                    stroke: #555555;
                     stroke-width: 0.2mm;
                     fill: #b47a2c;
                 }
                 .population {
-                    stroke: #fff;
+                    stroke: #ffffff;
                     stroke-width: 0.14mm;
                     fill: red;
                     fill-opacity: 0.3;
                 }
                 .gdp {
-                    stroke: #fff;
+                    stroke: #ffffff;
                     stroke-width: 0.14mm;
                     fill: blue;
                     fill-opacity: 0.3;
                 }
-                #background {
-                    fill: none;
+                .background {
+                    fill: white;
                 }
                 #capitals {
                     display: none;
@@ -83,9 +87,9 @@
                 #population {
                     display: none;
                 }
-                #frame {
+                .frame {
                     fill: none;
-                    stroke: #444;
+                    stroke: #444444;
                     stroke-width: 0.2mm;
                     stroke-linecap: round;
                 }
@@ -238,15 +242,13 @@
         var svg = d3.select("svg")
             .attr("width", width)
             .attr("height", height)
-            .attr('id', 'base map');
+            .call(svglayer, 'base map');
 
-		var defs = svg.append('defs');
+		var defs = svg.select('defs');
 
 		if (!show_ata) {
-			defs
-			.append('style')
-			.attr('type', 'text/css')
-			.text("#countries .ATA, #countries .ATF { display: none; } #Antarctica { display: none; stroke: #555; stroke-width: 0.2mm; stroke-linecap: round; }");
+			defs.select('style')
+			.text(defs.select('style').text() + "\n\n#countries .ATA, #countries .ATF { display: none; } #Antarctica { display: none; stroke: #555; stroke-width: 0.2mm; stroke-linecap: round; }");
 			is_antarctica = function (d) {
 	            if (!d.properties) return false;
 	            return ['ATA', 'ATF'].indexOf(d.properties.iso_a3) > -1;
@@ -268,15 +270,17 @@
 
 
         var bg = svg
+        	.append('g')
+            .call(svglayer, 'background')
             .append('rect')
-            .attr('id', 'background')
+            .attr('class', 'background')
             .attr('x', 2)
             .attr('y', 2)
             .attr('width', width - 8)
             .attr('height', height - 5);
 
         var world = svg.append('g')
-            .attr('id', 'world');
+            .call(svglayer, 'world');
 
         graphsignature([' ', ' ', ' '], ['Visionscarto', '2017'], laius);
 
@@ -300,13 +304,13 @@
                     });
 
                 var globe = world.append('g')
-                    .attr('id', 'globe')
+                    .call(svglayer, 'globe')
                     .attr('class', 'globe')
                     .style('display', show_graticule ? null : 'none');
 
                 globe.append('g')
                     .attr('class', 'land')
-                    .attr('id', 'land')
+                    .call(svglayer, 'land')
                     .append('path')
                     .attr('class', 'land')
                     .attr('clip-path', clipPath)
@@ -317,7 +321,7 @@
 
                 globe.append('g')
                     .attr('class', 'graticule')
-                    .attr('id', 'graticule')
+                    .call(svglayer, 'graticule')
                     .append('path')
                     .attr('class', 'graticule')
                     .attr('clip-path', clipPath)
@@ -326,12 +330,12 @@
 
                 globe.append('use')
                     .attr('class', 'sphere')
-                    .attr('id', 'sphere')
+                    .call(svglayer, 'sphere')
                     .attr("xlink:href", "#sphere");
 
                 world.append('g')
                     .attr('class', 'continents')
-                    .attr('id', 'continents')
+                    .call(svglayer, 'continents')
                     .selectAll('.continent')
                     .data(
                         d3.set(countries.geometries.map(function (d) {
@@ -340,12 +344,13 @@
                         .values()
                 )
                     .enter()
-                    .append('path')
+                    .append('g')
                     .attr('class', 'continent')
                     .attr('clip-path', clipPath)
-                    .attr('id', function (d) {
+                    .call(svglayer, function (d) {
                             return d;
                         })
+                    .append('path')
                     .attr('d', function (d) {
                             return path(
                                 topojson.merge(wjson,
@@ -359,26 +364,28 @@
 
                 var randomcolor = d3.scaleOrdinal(d3.schemeCategory20b);
                 world.append('g')
-                    .attr('id', 'countries')
+                    .attr('clip-path', clipPath)
+                    .call(svglayer, 'countries')
                     .selectAll('.country')
                     .data(topojson.feature(wjson, countries).features)
                     .enter()
-                    .append('path')
+                    .append('g')
                     .attr('class', function (d) {
                         return 'country ' + class_iso_a3(d.properties);
                     })
-                    .attr("d", path)
-                    .attr('clip-path', clipPath)
-                    .attr('id', function (d) {
+                    .call(svglayer, function (d) {
                         return class_iso_a3(d.properties) + ' ' + d.properties.name;
-                    });
+                    })
+                    .append('path')
+                    .attr("d", path);
 
-                world.append('path')
+                world.append('g')
+                    .call(svglayer, 'borders')
+                    .append('path')
+                    .attr('class', 'borders')
                     .datum(topojson.mesh(wjson, countries, function (a, b) {
                         return a !== b;
                     }))
-                    .attr('class', 'border')
-                    .attr('id', 'borders')
                     .attr('d', path)
                     .attr('clip-path', clipPath);
 
@@ -392,14 +399,14 @@
                         return a == b;
                     }))
                     .attr('class', 'coast')
-                    .attr('id', 'coasts')
+                    .call(svglayer, 'coasts')
                     .attr('d', path)
                     .attr('clip-path', clipPath);
 
 
                 // ISLAND NATIONS
                 var isl = world.append('g')
-                    .attr('id', 'island-nations');
+                    .call(svglayer, 'island-nations');
 
                 isl.selectAll('circle')
                     .data(
@@ -417,7 +424,7 @@
                 )
                     .enter()
                     .append('circle')
-                    .attr('id', function (d) {
+                    .call(svglayer, function (d) {
                             return d.id + ' ' + d.name;
                         })
                     .attr('cx', function (d) {
@@ -434,7 +441,7 @@
 
                 // CAPITALS
                 var cap = world.append('g')
-                    .attr('id', 'capitals');
+                    .call(svglayer, 'capitals');
 
                 cap.selectAll('rect')
                     .data(
@@ -452,7 +459,7 @@
                 )
                     .enter()
                     .append('g')
-                    .attr('id', function (d) {
+                    .call(svglayer, function (d) {
                             return d.id + ' ' + d.capital;
                         })
                     .attr('class', function (d) {
@@ -489,7 +496,7 @@
                     .range([1, 23]);
 
                 world.append('g')
-                    .attr('id', 'population')
+                    .call(svglayer, 'population')
                     .selectAll('circle')
                     .data(data)
                     .enter()
@@ -509,7 +516,7 @@
                     .attr('r', function (d) {
                             return pop_scale(d.pop);
                         })
-                    .attr('id', function (d) {
+                    .call(svglayer, function (d) {
                         return d.properties.GU_A3 + ' ' + d.properties.NAME;
                     });
 
@@ -536,7 +543,7 @@
                     .range([1, 23]);
 
                 world.append('g')
-                    .attr('id', 'gdp')
+                    .call(svglayer, 'gdp')
                     .selectAll('rect')
                     .data(data)
                     .enter()
@@ -563,7 +570,7 @@
                             var x = -gdp_scale(d.gdp) / 2;
                             return 'translate(' + x + ',' + x + ')';
                         })
-                    .attr('id', function (d) {
+                    .call(svglayer, function (d) {
                         return d.properties.GU_A3 + ' ' + d.properties.NAME;
                     });
             });
@@ -576,16 +583,17 @@
         function graphsignature(titre, lignes, laius) {
             var sig = svg
                 .append('g')
-                .attr('id', 'signature');
+                .call(svglayer, 'signature');
 
             sig.append('rect')
-                .attr('id', 'frame')
+                .call(svglayer, 'frame')
+                .attr('class', 'frame')
                 .attr('x', 2)
                 .attr('y', 2)
                 .attr('width', width - 8)
                 .attr('height', height - 5);
 
-            var gtitre = sig.append('g').attr('id', 'title');
+            var gtitre = sig.append('g').call(svglayer, 'title');
             var size = 36;
             gtitre
                 .selectAll('text')
@@ -603,7 +611,7 @@
                     return d;
                 });
 
-            var gsignature = sig.append('g').attr('id', lignes[0]);
+            var gsignature = sig.append('g').call(svglayer, lignes[0]);
 
             gsignature
                 .selectAll('text')
@@ -642,7 +650,7 @@
 
             if (laius) {
                 glaius = sig.append('text')
-                    .attr('id', 'presentation');
+                    .call(svglayer, 'presentation');
                 glaius
                     .selectAll('tspan')
                     .data(laius)
@@ -666,5 +674,13 @@
             }
 
         }
+
+	// cf. https://github.com/d3/d3/issues/291#issuecomment-226988829
+	function svglayer(sel, id) {
+		return sel
+			.attr('id', id)
+			.attr(':inkscape:groupmode', 'layer')
+			.attr(':inkscape:label', id);
+	}
 
     </script>
