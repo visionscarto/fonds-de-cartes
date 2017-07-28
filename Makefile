@@ -83,7 +83,7 @@ optim-png: ## optimize PNG
 	#pngquant --ext .png --force build/*.png
 
 optim-svg: ## optimize SVG
-	svgo --precision=2 --disable=removeUnknownsAndDefaults --disable=removeXMLProcInst build/
+	svgo --precision=2 --disable=removeEditorsNSData --disable=removeUnknownsAndDefaults --disable=removeXMLProcInst build/
 
 
 
