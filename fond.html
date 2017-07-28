@@ -119,7 +119,7 @@
             rotate = [+param('rotate', -10.23)],
             show_graticule = param('graticule', false),
             show_ata = param('antarctica', false),
-            clipPath = param('clip') ? 'url(#clip)' : false;
+            clipPath = param('clip') ? 'url(#clip)' : null;
 
         switch (pj) {
         case 'bertin1953':
@@ -257,13 +257,12 @@
 	        is_antarctica = function(d) { return false; };
 		}
 
-		// clip to sphere?
 		defs.append("path")
             .datum({type: "Sphere"})
             .attr("id", "sphere")
             .attr("d", path);
 
-        defs.append("clipPath")
+        if (clipPath) defs.append("clipPath")
             .attr("id", "clip")
             .append("use")
             .attr("xlink:href", "#sphere");
@@ -394,14 +393,21 @@
                     return !is_antarctica(d);
                 });
 
-                world.append('path')
+                world.append('g')
+                    .call(svglayer, 'coast')
+                    .append('path')
                     .datum(topojson.mesh(wjson, countries, function (a, b) {
                         return a == b;
                     }))
-                    .attr('class', 'coast')
-                    .call(svglayer, 'coasts')
                     .attr('d', path)
+                    .attr('class', 'coast')
                     .attr('clip-path', clipPath);
+
+                world.append('use')
+                    .attr('class', 'sphere')
+                    .call(svglayer, 'sphere')
+                    .attr("xlink:href", "#sphere")
+                    .style('display', show_graticule ? null : 'none');
 
 
                 // ISLAND NATIONS

@@ -61,7 +61,7 @@ southpole: ## projection azimutale équivalente nord
 ### PROJECTIONS BIZARRES
 
 gingery:
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=geoGingery&clip=1&graticule=1" build/visionscarto-gingery 2
+	./bin/screenshot.js "file://`pwd`/fond.html?projection=geoGingery&antarctica=1&clip=1&graticule=1" build/visionscarto-gingery 2
 
 larrivee: ## projection larrivee
 	./bin/screenshot.js "file://`pwd`/fond.html?projection=larrivee" build/visionscarto-larrivee 2
