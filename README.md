@@ -2,6 +2,10 @@
 
 ![](images/visionscarto-bertin1953-simple.png)
 
+## Description et téléchargements
+
+- [« Fonds de cartes »](https://visionscarto.net/fonds-de-cartes), visionscarto.net.
+
 ## Sources
 
 ### Éléments géographiques
@@ -31,3 +35,7 @@
 - [svgo](https://github.com/svg/svgo)
 - [optipng](http://optipng.sourceforge.net/)
 
+
+### Comment participer
+
+Toutes vos remarques, suggestions et corrections sont les bienvenues, soit par email à l’adresse contact@visionscarto.net ; soit en ouvrant des _issues_ sur ce répertoire github. Merci !
