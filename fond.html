@@ -37,7 +37,7 @@
                 .continents {
                     fill: #eeeeee;
                 }
-                .sphere {
+                .sphere, .sphere2 {
                     fill: none;
                     stroke: #999999;
                     stroke-width: 0.30mm;
@@ -403,11 +403,13 @@
                     .attr('class', 'coast')
                     .attr('clip-path', clipPath);
 
-                world.append('use')
-                    .attr('class', 'sphere')
-                    .call(svglayer, 'sphere')
-                    .attr("xlink:href", "#sphere")
-                    .style('display', show_graticule ? null : 'none');
+                world.append('g')
+                    .call(svglayer, 'sphere2')
+                    .style('display', show_graticule ? null : 'none')
+                    .append('path')
+                    .attr('class', 'sphere2')
+                    .datum({type:"Sphere"})
+                    .attr('d', path);
 
 
                 // ISLAND NATIONS
@@ -591,8 +593,9 @@
                 .append('g')
                 .call(svglayer, 'signature');
 
-            sig.append('rect')
+            sig.append('g')
                 .call(svglayer, 'frame')
+                .append('rect')
                 .attr('class', 'frame')
                 .attr('x', 2)
                 .attr('y', 2)
