@@ -112,7 +112,7 @@
             return def;
         }
 
-        var topo = 'data/countries_110m_mar-sah.topo.json',
+        var topo = 'data/countries_110m.json',
             projection = null,
             laius_projection = '',
             pj = param('projection', 'robinson'),
@@ -288,7 +288,8 @@
             .defer(d3.csv, './data/capitals.csv')
             .defer(d3.csv, './data/island-nations.csv')
             .defer(d3.json, '../some-geo-data/population-centroids.geojson')
-            .await(function (error, wjson, capitals, islands, pop) {
+            .defer(d3.text, './build/tag.txt')
+            .await(function (error, wjson, capitals, islands, pop, tag) {
 
                 if (error) throw error;
 
@@ -301,6 +302,10 @@
                             class_iso_a3(b.properties)
                         );
                     });
+
+                svg.append('text')
+                    .text('Last-Modified: ' + tag)
+                    .attr('display', 'none');
 
                 var globe = world.append('g')
                     .call(svglayer, 'globe')
