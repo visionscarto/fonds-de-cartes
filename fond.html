@@ -135,7 +135,7 @@
                 .rotate(rotate);
             laius_projection = 'Projection plate carrée (équirectangulaire), attribuée à Marinus de Tyr (100 ap. JC).';
             break;
-        case 'northpole':
+        case 'arctic':
             projection = d3.geoAzimuthalEqualArea()
                 .scale(354)
                 .translate([350, 240])
@@ -143,7 +143,7 @@
                 .clipExtent([[2,2], [693, 471]]);
             laius_projection = 'Projection azimutale équivalente.';
             break;
-        case 'southpole':
+        case 'antarctic':
             projection = d3.geoAzimuthalEqualArea()
                 .scale(354)
                 .translate([350, 240])
