@@ -54,6 +54,9 @@ page.open(url,
 
             console.log('saving ' + url + ' at scale ' + scale + ' as ' + dest + '.png');
             page.render(dest + '.png');
+
+            // console.log('saving ' + url + ' at scale ' + scale + ' as ' + dest + '.pdf');
+            // page.render(dest + '.pdf');
             phantom.exit();
 
         }, secs * 1000);
