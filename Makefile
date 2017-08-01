@@ -1,6 +1,9 @@
-all: init fonds ## data & fonds de cartes
+all: init tag fonds-bizarres fonds ## data & fonds de cartes
 
-fonds: bertin1953 robinson winkel-tripel northpole southpole optim ## fonds de cartes standards
+tag:
+	gstat  -c '%y' fond.html > build/tag.txt
+
+fonds: bertin1953 robinson winkel-tripel arctic antarctic optim ## fonds de cartes standards
 
 fonds-bizarres: equirectangular larrivee bottomley gallpeters gingery ## fonds de cartes bizarres
 
@@ -51,11 +54,11 @@ robinson: ## projection robinson
 winkel-tripel: ## projection winkel-tripel
 	./bin/screenshot.js "file://`pwd`/fond.html?projection=winkel-tripel" build/visionscarto-winkel-tripel 2
 
-northpole: ## projection azimutale équivalente nord
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=northpole&graticule=1" build/visionscarto-northpole 2
+arctic: ## projection azimutale équivalente nord
+	./bin/screenshot.js "file://`pwd`/fond.html?projection=arctic&graticule=1" build/visionscarto-arctic 2
 
-southpole: ## projection azimutale équivalente nord
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=southpole&antarctica=1&graticule=1" build/visionscarto-southpole 2
+antarctic: ## projection azimutale équivalente nord
+	./bin/screenshot.js "file://`pwd`/fond.html?projection=antarctic&antarctica=1&graticule=1" build/visionscarto-antarctic 2
 
 
 ### PROJECTIONS BIZARRES
