@@ -1,4 +1,5 @@
 id,name,lat,lon
+AND,Andorre,42.53,1.53
 ATG,Antigua & Barbuda,17.0870487,-61.8535321
 BHR,Bahrain,26.0667,50.5577
 COM,Comores,-11.7316,43.4406
@@ -11,12 +12,16 @@ HKG,"Hong Kong, China",22.396428,114.109497
 KIR,Kiribati,1.8708833,-157.3630262
 KNA,St. Kitts and Nevis,17.357822,-62.782998
 LCA,St. Lucia,13.909444,-60.978893
+LIE,Liechtenstein,47.16,9.46
 MAC,"Macao, China",22.198745,113.543873
 MDV,Maldives,1.977247,73.5361034
 MHL,Marshall Islands,6.0683936,171.989379
+MCO,Monaco,43.73,7.42
 MUS,Mauritius,-20.348404,57.552152
 SGP,Singapore,1.352083,103.819836
+SMR,San Marino,43.94,12.45
 STP,S. Tomé & Principe,0.1996928,6.3303559
 SYC,Seychelles,-4.679574,55.491977
+VAT,Vatican,41.90,12.45
 VCT,St. Vincent and the G.,13.2527797,-61.3372523
 WSM,Samoa,-13.759029,-172.104629
