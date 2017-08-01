@@ -18,11 +18,14 @@
 ### Projections
 
 - [Visionscarto inspirée de Bertin 1953](http://visionscarto.net/)
-- [Bottomley](http://visionscarto.net/la-projection-bottomley)
-- [Larrivée](http://bl.ocks.org/mbostock/3719042)
 - [Robinson](http://bl.ocks.org/mbostock/3710566)
 - [Winkel-Tripel](http://bl.ocks.org/mbostock/3682676)
+
+<!--
+- [Bottomley](http://visionscarto.net/la-projection-bottomley)
+- [Larrivée](http://bl.ocks.org/mbostock/3719042)
 - [Gall-Peters](http://bl.ocks.org/mbostock/3946824)
+-->
 
 (La plupart des projections sont faites avec une rotation de 10,2° de manière à faire passer la ligne de césure dans le détroit de Bering.)
 
