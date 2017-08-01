@@ -42,6 +42,7 @@ page.open(url,
             // match all SVGs and save them
             var i = 0;
             var u = a.replace(/<svg[^]*?<\/svg>/gm, function(svg) {
+                console.log('saving ' + url + ' at scale ' + scale + ' as ' + dest + '.svg');
 
                 // plantage sur les textures !
                 svg = svg
@@ -51,29 +52,8 @@ page.open(url,
                 i++;
             });
 
-/*
-            // evacuer un bug sur stroke-dasharray
-            page.evaluate(function() {
-                (typeof d3 != 'undefined') && d3.selectAll('.fixdasharray')
-                .each(function(d) {
-                    var me = d3.select(this);
-                    if (me.attr('stroke-width') && +me.attr('stroke-width') < 1) {
-                        me.attr({
-                            opacity: +me.attr('stroke-width'),
-                            'stroke-width': 1,
-                        });
-                    }
-                });
-            });
-*/
-
-            // precisions des valeurs : 1 seul chiffre après la virgule
-            a = a.replace(/([0-9]\.[0-9])[0-9]+/g, '$1');
-            saveas('<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">' + a, 'screenshot.svg');
-            
-            console.log('saving ' + url + ' at scale ' + scale + ' as ' + dest);
-            page.render(dest);
-            page.render(dest+'.png');
+            console.log('saving ' + url + ' at scale ' + scale + ' as ' + dest + '.png');
+            page.render(dest + '.png');
             phantom.exit();
 
         }, secs * 1000);
