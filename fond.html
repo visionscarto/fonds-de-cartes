@@ -50,6 +50,12 @@
                 .land {
                     fill: #999999;
                 }
+                .disputed {
+                    fill: none;
+                    stroke: black;
+                    stroke-width: 0.05mm;
+                    stroke-dasharray: 0.3mm 0.1mm;
+                }
                 .capital {
                     stroke: #000000;
                     stroke-width: 0.15mm;
@@ -57,7 +63,7 @@
                 }
                 .country-island {
                     stroke: #555555;
-                    stroke-width: 0.2mm;
+                    stroke-width: 0.20mm;
                     fill: #b47a2c;
                 }
                 .population {
@@ -285,11 +291,12 @@
 
         d3.queue()
             .defer(d3.json, topo)
+            .defer(d3.json, './data/disputed.geojson')
             .defer(d3.csv, './data/capitals.csv')
             .defer(d3.csv, './data/island-nations.csv')
             .defer(d3.json, '../some-geo-data/population-centroids.geojson')
             .defer(d3.text, './build/tag.txt')
-            .await(function (error, wjson, capitals, islands, pop, tag) {
+            .await(function (error, wjson, disputed, capitals, islands, pop, tag) {
 
                 if (error) throw error;
 
@@ -379,6 +386,22 @@
                     })
                     .call(svglayer, function (d) {
                         return class_iso_a3(d.properties) + ' ' + d.properties.name;
+                    })
+                    .append('path')
+                    .attr("d", path);
+
+                world.append('g')
+                    .attr('clip-path', clipPath)
+                    .call(svglayer, 'disputed')
+                    .selectAll('.country')
+                    .data(disputed.features)
+                    .enter()
+                    .append('g')
+                    .attr('class', function (d) {
+                        return 'disputed';
+                    })
+                    .call(svglayer, function (d) {
+                        return d.properties.name;
                     })
                     .append('path')
                     .attr("d", path);
