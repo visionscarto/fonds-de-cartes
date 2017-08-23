@@ -202,7 +202,7 @@
             laius_projection = 'Projection créée par Jason Davies, d’après Walter Gingery (1944).';
             break;
         case 'waterman':
-            projection = d3.geoPolyhedronWaterman()
+            projection = d3.geoPolyhedralWaterman()
                 .rotate([25, -2])
                 .scale(118)
                 .translate([200, 200]);
