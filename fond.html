@@ -295,9 +295,8 @@
 
 		// http://localhost/maps/fonds-de-cartes/fond.html?projection=PolyhedralLee&antarctica=1&graticule=1&rotate=-90&pitch=180&orient=180
 		if (orient) world
-		    .attr('transform-origin', `${width/2}px ${height/2}px`)
-		    .attr('transform', `rotate(${orient})`)
-		    ;
+		    .attr('transform-origin', (width/2) + "px " + (height/2) + "px")
+		    .attr('transform', "rotate(" + orient + ")");
 
 
         graphsignature([' ', ' ', ' '], ['Visionscarto', '2017'], laius);
