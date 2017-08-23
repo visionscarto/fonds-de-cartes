@@ -242,9 +242,11 @@ d3
     }
 
     if (projection && projection.precision) projection.precision(0.001);
+    var laiusp = _(pj);
+    if (laiusp === pj) laiusp = _('projectiondefault').replace("%p", pj)
 
     var laius = [
-      _(pj).replace("%p", pj),
+      laiusp,
       _("credits1"), // 'Contours : Natural Earth, modifiés Visionscarto. Logiciel : D3.js',
       _("credits2"), // 'Gratuit et libre pour tous usages.',
       _("credits3") // 'Nous aimons les cartes, partageons-les !  contact@visionscarto.net'
