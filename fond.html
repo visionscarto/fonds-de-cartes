@@ -126,6 +126,7 @@
             rotate = [+param('rotate', -10.23), +param('pitch', 0), +param('roll', 0)],
             show_graticule = param('graticule', false),
             show_ata = param('antarctica', false),
+            orient = +param('orient', 0),
             clipPath = param('clip') ? 'url(#clip)' : null;
 
         switch (pj) {
@@ -287,6 +288,13 @@
 
         var world = svg.append('g')
             .call(svglayer, 'world');
+
+		// http://localhost/maps/fonds-de-cartes/fond.html?projection=PolyhedralLee&antarctica=1&graticule=1&rotate=-90&pitch=180&orient=180
+		if (orient) world
+		    .attr('transform-origin', `${width/2}px ${height/2}px`)
+		    .attr('transform', `rotate(${orient})`)
+		    ;
+
 
         graphsignature([' ', ' ', ' '], ['Visionscarto', '2017'], laius);
 
