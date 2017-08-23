@@ -7,7 +7,7 @@ fonds: arctic antarctic bertin1953 robinson winkel-tripel optim ## fonds de cart
 
 fonds-bizarres: bottomley gallpeters larrivee timesus ## fonds de cartes bizarres
 
-fonds-tests: gingery ## fonds de cartes en test
+fonds-tests: gingery cox lee leenorth ## fonds de cartes en test
 
 fonds-utiles: equirectangular ## fonds de cartes utiles
 
@@ -74,15 +74,23 @@ bottomley: ## projection bottomley
 gallpeters: ## projection gall-peters
 	./bin/screenshot.js "file://`pwd`/fond.html?projection=gallpeters" build/visionscarto-gallpeters 2
 
-gingery:
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=geoGingery&antarctica=1&clip=1&graticule=1" build/visionscarto-gingery 2
-
 larrivee: ## projection larrivee
 	./bin/screenshot.js "file://`pwd`/fond.html?projection=larrivee" build/visionscarto-larrivee 2
 
 timesus: ## projection Times centrée sur les US
 	./bin/screenshot.js "file://`pwd`/fond.html?projection=timesus" build/visionscarto-timesus 2
 
+gingery:
+	./bin/screenshot.js "file://`pwd`/fond.html?projection=geoGingery&antarctica=1&clip=1&graticule=1" build/visionscarto-gingery 2
+
+cox:
+	./bin/screenshot.js "file://`pwd`/fond.html?projection=Cox&graticule=1" build/visionscarto-cox 2
+
+lee:
+	./bin/screenshot.js "file://`pwd`/fond.html?projection=PolyhedralLee&graticule=1&antarctica=1&rotate=-30&orient=180" build/visionscarto-lee 2
+
+leenorth:
+	./bin/screenshot.js "file://`pwd`/fond.html?projection=PolyhedralLee&graticule=1&antarctica=1&rotate=30&roll=180&orient=180" build/visionscarto-leenorth 2
 
 optim: optim-svg optim-png ## optimize all images
 
