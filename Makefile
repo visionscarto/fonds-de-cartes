@@ -1,11 +1,15 @@
-all: init tag fonds-bizarres fonds ## data & fonds de cartes
+all: init tag fonds-bizarres fonds-utiles fonds-tests fonds ## data & fonds de cartes
 
 tag:
 	gstat  -c '%y' fond.html > build/tag.txt
 
-fonds: bertin1953 robinson winkel-tripel arctic antarctic optim ## fonds de cartes standards
+fonds: arctic antarctic bertin1953 robinson winkel-tripel optim ## fonds de cartes standards
 
-fonds-bizarres: equirectangular larrivee bottomley gallpeters gingery ## fonds de cartes bizarres
+fonds-bizarres: bottomley gallpeters larrivee timesus ## fonds de cartes bizarres
+
+fonds-tests: gingery ## fonds de cartes en test
+
+fonds-utiles: equirectangular ## fonds de cartes utiles
 
 
 ### DATA
@@ -40,19 +44,7 @@ topo1: ## create build/countries.topo.json
 
 topo: topo1
 
-### PROJECTIONS
-
-bertin1953: ## projection bertin 1953
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=bertin1953" build/visionscarto-bertin1953 2
-
-equirectangular: ## projection equirectangular
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=equirectangular" build/visionscarto-equirectangular 2
-
-robinson: ## projection robinson
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=robinson" build/visionscarto-robinson 2
-
-winkel-tripel: ## projection winkel-tripel
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=winkel-tripel" build/visionscarto-winkel-tripel 2
+### PROJECTIONS PUBLIEES SUR https://visionscarto.net/fonds-de-cartes
 
 arctic: ## projection azimutale équivalente nord
 	./bin/screenshot.js "file://`pwd`/fond.html?projection=arctic&graticule=1" build/visionscarto-arctic 2
@@ -60,20 +52,33 @@ arctic: ## projection azimutale équivalente nord
 antarctic: ## projection azimutale équivalente nord
 	./bin/screenshot.js "file://`pwd`/fond.html?projection=antarctic&antarctica=1&graticule=1" build/visionscarto-antarctic 2
 
+bertin1953: ## projection bertin 1953
+	./bin/screenshot.js "file://`pwd`/fond.html?projection=bertin1953" build/visionscarto-bertin1953 2
+
+robinson: ## projection robinson
+	./bin/screenshot.js "file://`pwd`/fond.html?projection=robinson" build/visionscarto-robinson 2
+
+winkel-tripel: ## projection winkel-tripel
+	./bin/screenshot.js "file://`pwd`/fond.html?projection=winkel-tripel" build/visionscarto-winkel-tripel 2
+
+### PROJECTIONS UTILES
+
+equirectangular: ## projection equirectangular
+	./bin/screenshot.js "file://`pwd`/fond.html?projection=equirectangular" build/visionscarto-equirectangular 2
 
 ### PROJECTIONS BIZARRES
-
-gingery:
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=geoGingery&antarctica=1&clip=1&graticule=1" build/visionscarto-gingery 2
-
-larrivee: ## projection larrivee
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=larrivee" build/visionscarto-larrivee 2
 
 bottomley: ## projection bottomley
 	./bin/screenshot.js "file://`pwd`/fond.html?projection=bottomley" build/visionscarto-bottomley 2
 
 gallpeters: ## projection gall-peters
 	./bin/screenshot.js "file://`pwd`/fond.html?projection=gallpeters" build/visionscarto-gallpeters 2
+
+gingery:
+	./bin/screenshot.js "file://`pwd`/fond.html?projection=geoGingery&antarctica=1&clip=1&graticule=1" build/visionscarto-gingery 2
+
+larrivee: ## projection larrivee
+	./bin/screenshot.js "file://`pwd`/fond.html?projection=larrivee" build/visionscarto-larrivee 2
 
 timesus: ## projection Times centrée sur les US
 	./bin/screenshot.js "file://`pwd`/fond.html?projection=timesus" build/visionscarto-timesus 2
