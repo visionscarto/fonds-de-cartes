@@ -201,6 +201,12 @@
                 .fitExtent([[2,2], [693, 471]], {type:"Sphere"});
             laius_projection = 'Projection créée par Jason Davies, d’après Walter Gingery (1944).';
             break;
+        case 'berghaus':
+            projection = d3.geoBerghaus()
+                .rotate(rotate)
+                .fitExtent([[2,2], [693, 471]], {type:"Sphere"});
+            laius_projection = 'Projection créée par Jason Davies ???, d’après Xxxx Berghaus (xxxx).';
+            break;
         case 'waterman':
             projection = d3.geoPolyhedralWaterman()
                 .rotate([25, -2])
