@@ -250,9 +250,10 @@
         var svg = d3.select("svg")
             .attr("width", width)
             .attr("height", height)
-            .call(svglayer, 'base map');
 
 		var defs = svg.select('defs');
+		
+		svg = svg.append('g').call(svglayer, 'base map');
 
 		if (!show_ata) {
 			defs.select('style')
