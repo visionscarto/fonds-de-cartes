@@ -232,6 +232,7 @@ d3
         pj = pj.replace(/^geo/, "");
         if ("geo" + pj in d3) {
           projection = d3["geo" + pj]();
+          if (projection.rotate) projection.rotate(rotate);
           projection.fitExtent([[2, 2], [693, 471]], { type: "Sphere" });
         } else {
           alert("projection " + pj + " inconnue");
