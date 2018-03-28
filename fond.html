@@ -103,12 +103,20 @@
         </defs>
     </svg>
 
-    <script src="./lib/d3.v4.min.js"></script>
-    <script src="./lib/d3-geo.js"></script>
+    <script src="./lib/d3.min.js"></script>
+    <script src="./lib/d3-queue.js"></script>
     <script src="./lib/d3-geo-projection.js"></script>
+    <script src="./lib/d3-geo-polygon.js"></script>
+    <script src="./lib/fetch-polyfill.js"></script><!-- for phantomjs -->
+    <script src="./lib/promise.min.js"></script><!-- for phantomjs -->
     <script src="./lib/topojson.v2.min.js"></script>
 
     <script>
+
+    var width = 700,
+      height = 475;
+
+
 function param(x, def) {
   var re = new RegExp("[?](.*&)*" + x + "=([^&]*)"),
     m = window.location.href.match(re);
@@ -124,20 +132,26 @@ var topo = "data/countries_110m.json",
   rotate = [+param("rotate", -10.23), +param("pitch", 0), +param("roll", 0)],
   show_graticule = param("graticule", false),
   show_ata = param("antarctica", false),
-  orient = +param("orient", 0),
+  angle = param("angle", null),
   clipPath = param("clip") ? "url(#clip)" : null;
 
-d3
-  .queue()
-  .defer(d3.json, topo)
-  .defer(d3.json, "./data/disputed.geojson")
-  .defer(d3.csv, "./data/capitals.csv")
-  .defer(d3.csv, "./data/island-nations.csv")
-  .defer(d3.json, "../some-geo-data/population-centroids.geojson")
-  .defer(d3.text, "./build/tag.txt")
-  .defer(d3.json, "./i18n.json")
-  .await(function(error, wjson, disputed, capitals, islands, pop, tag, i18n) {
-    if (error) throw error;
+var promises = [];
+promises.push(d3.json(topo));
+promises.push(d3.json("./data/disputed.geojson"));
+promises.push(d3.csv("./data/capitals.csv"));
+promises.push(d3.csv("./data/island-nations.csv"));
+promises.push(d3.json("../some-geo-data/population-centroids.geojson"));
+promises.push(d3.text("./build/tag.txt"));
+promises.push(d3.json("./i18n.json"));
+
+Promise.all(promises).then(function(v) {
+  var wjson = v[0],
+  	  disputed = v[1],
+  	  capitals = v[2],
+  	  islands = v[3],
+  	  pop = v[4],
+  	  tag = v[5],
+  	  i18n = v[6];
 
     switch (pj) {
       case "bertin1953":
@@ -228,6 +242,13 @@ d3
           .scale(151)
           .translate([347, 257]);
         break;
+      case "lee":
+        projection = d3
+          .geoPolyhedralLee()
+          .fitExtent([[20, 15], [width-20, height-20]], {type: "Sphere"});
+        // todo : revoir le cadre et déplacer la signature
+        // todo : bien gérer la sphere
+        break;
       default:
         pj = pj.replace(/^geo/, "");
         if ("geo" + pj in d3) {
@@ -242,6 +263,9 @@ d3
     }
 
     if (projection && projection.precision) projection.precision(0.001);
+    if (projection && projection.angle && angle !== null) {
+      projection.angle(angle);
+    };
     var laiusp = _(pj);
     if (laiusp === pj) laiusp = _('projectiondefault').replace("%p", pj)
 
@@ -251,9 +275,6 @@ d3
       _("credits2"), // 'Gratuit et libre pour tous usages.',
       _("credits3") // 'Nous aimons les cartes, partageons-les !  contact@visionscarto.net'
     ];
-
-    var width = 700,
-      height = 475;
 
     var path = d3.geoPath().projection(projection);
 
@@ -305,13 +326,7 @@ d3
 
     var world = svg.append("g").call(svglayer, "world");
 
-    // http://localhost/maps/fonds-de-cartes/fond.html?projection=PolyhedralLee&antarctica=1&graticule=1&rotate=-90&pitch=180&orient=180
-    if (orient)
-      world
-        .attr("transform-origin", width / 2 + "px " + height / 2 + "px")
-        .attr("transform", "rotate(" + orient + ")");
-
-    graphsignature([" ", " ", " "], ["Visionscarto", "2017"], laius);
+    graphsignature([" ", " ", " "], ["Visionscarto", "2018"], laius);
 
     var countries = wjson.objects.countries;
     countries.geometries = countries.geometries.sort(function(a, b) {

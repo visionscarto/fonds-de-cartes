@@ -1,4 +1,4 @@
-LANG=en
+LANG=es
 
 all: init tag fonds-bizarres fonds-utiles fonds-tests fonds ## data & fonds de cartes
 
@@ -49,50 +49,50 @@ topo: topo1
 ### PROJECTIONS PUBLIEES SUR https://visionscarto.net/fonds-de-cartes
 
 arctic: ## projection azimutale équivalente nord
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=arctic&graticule=1&lang=$$LANG" "build/$$LANG/visionscarto-arctic" 2
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=arctic&graticule=1&lang=$$LANG" "build/$$LANG/visionscarto-arctic" 2
 
 antarctic: ## projection azimutale équivalente nord
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=antarctic&antarctica=1&graticule=1&lang=$$LANG" "build/$$LANG/visionscarto-antarctic" 2
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=antarctic&antarctica=1&graticule=1&lang=$$LANG" "build/$$LANG/visionscarto-antarctic" 2
 
 bertin1953: ## projection bertin 1953
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=bertin1953&lang=$$LANG" "build/$$LANG/visionscarto-bertin1953" 2
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=bertin1953&lang=$$LANG" "build/$$LANG/visionscarto-bertin1953" 2
 
 robinson: ## projection robinson
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=robinson&lang=$$LANG" "build/$$LANG/visionscarto-robinson" 2
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=robinson&lang=$$LANG" "build/$$LANG/visionscarto-robinson" 2
 
 winkel-tripel: ## projection winkel-tripel
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=winkel-tripel&lang=$$LANG" "build/$$LANG/visionscarto-winkel-tripel" 2
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=winkel-tripel&lang=$$LANG" "build/$$LANG/visionscarto-winkel-tripel" 2
 
 ### PROJECTIONS UTILES
 
 equirectangular: ## projection equirectangular
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=equirectangular&lang=$$LANG" "build/$$LANG/visionscarto-equirectangular" 2
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=equirectangular&lang=$$LANG" "build/$$LANG/visionscarto-equirectangular" 2
 
 ### PROJECTIONS BIZARRES
 
 bottomley: ## projection bottomley
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=bottomley&lang=$$LANG" "build/$$LANG/visionscarto-bottomley" 2
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=bottomley&lang=$$LANG" "build/$$LANG/visionscarto-bottomley" 2
 
 gallpeters: ## projection gall-peters
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=gallpeters&lang=$$LANG" "build/$$LANG/visionscarto-gallpeters" 2
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=gallpeters&lang=$$LANG" "build/$$LANG/visionscarto-gallpeters" 2
 
 larrivee: ## projection larrivee
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=larrivee&lang=$$LANG" "build/$$LANG/visionscarto-larrivee" 2
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=larrivee&lang=$$LANG" "build/$$LANG/visionscarto-larrivee" 2
 
 timesus: ## projection Times centrée sur les US
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=timesus&lang=$$LANG" "build/$$LANG/visionscarto-timesus" 2
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=timesus&lang=$$LANG" "build/$$LANG/visionscarto-timesus" 2
 
 gingery:
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=geoGingery&antarctica=1&clip=1&graticule=1&lang=$$LANG" "build/$$LANG/visionscarto-gingery" 2
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=geoGingery&antarctica=1&clip=1&graticule=1&lang=$$LANG" "build/$$LANG/visionscarto-gingery" 2
 
 cox:
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=Cox&graticule=1&lang=$$LANG" "build/$$LANG/visionscarto-cox" 2
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=Cox&graticule=1&lang=$$LANG" "build/$$LANG/visionscarto-cox" 2
 
 lee:
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=PolyhedralLee&graticule=1&antarctica=1&rotate=-30&orient=180&lang=$$LANG" "build/$$LANG/visionscarto-lee" 2
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=PolyhedralLee&graticule=1&antarctica=1&rotate=-30&orient=180&lang=$$LANG" "build/$$LANG/visionscarto-lee" 2
 
 leenorth:
-	./bin/screenshot.js "file://`pwd`/fond.html?projection=PolyhedralLee&graticule=1&antarctica=1&rotate=30&roll=180&orient=180&lang=$$LANG" "build/$$LANG/visionscarto-leenorth" 2
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=PolyhedralLee&graticule=1&antarctica=1&rotate=30&roll=180&orient=180&lang=$$LANG" "build/$$LANG/visionscarto-leenorth" 2
 
 optim: optim-svg optim-png ## optimize all images
 
