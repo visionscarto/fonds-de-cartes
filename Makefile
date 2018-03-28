@@ -64,10 +64,10 @@ winkel-tripel: ## projection winkel-tripel
 	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=winkel-tripel&lang=$$LANG" "build/$$LANG/visionscarto-winkel-tripel" 2
 
 airocean: ## projection airocean de Buckminster Fuller
-	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=airocean&graticule=1&antarctica=1&lang=$$LANG" "build/$$LANG/visionscarto-cahillkeyes" 2
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=airocean&graticule=1&antarctica=1&lang=$$LANG" "build/$$LANG/visionscarto-airocean" 2
 
 cahillkeyes: ## projection de Cahill-Keyes
-	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=cahillkeyes&graticule=1&antarctica=1&lang=$$LANG" "build/$$LANG/visionscarto-airocean" 2
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=cahillkeyes&graticule=1&antarctica=1&lang=$$LANG" "build/$$LANG/visionscarto-cahillkeyes" 2
 
 ### PROJECTIONS UTILES
 
