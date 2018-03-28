@@ -104,7 +104,6 @@
     </svg>
 
     <script src="./lib/d3.min.js"></script>
-    <script src="./lib/d3-queue.js"></script>
     <script src="./lib/d3-geo-projection.js"></script>
     <script src="./lib/d3-geo-polygon.js"></script>
     <script src="./lib/fetch-polyfill.js"></script><!-- for phantomjs -->
@@ -244,8 +243,11 @@ Promise.all(promises).then(function(v) {
         break;
       case "lee":
         projection = d3
-          .geoPolyhedralLee()
+          .geoTetrahedralLee()
+          .angle(-30)
           .fitExtent([[20, 15], [width-20, height-20]], {type: "Sphere"});
+        projection.precision(0.1);
+        delete projection.precision; // Lee n'accepte pas trop de precision sinon ses coins sont abimes
         // todo : revoir le cadre et déplacer la signature
         // todo : bien gérer la sphere
         break;
