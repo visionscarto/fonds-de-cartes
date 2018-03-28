@@ -241,6 +241,16 @@ Promise.all(promises).then(function(v) {
           .scale(151)
           .translate([347, 257]);
         break;
+      case "airocean":
+        projection = d3
+          .geoAirocean()
+          .fitExtent([[10, 2], [683, 421]], { type: "Sphere" });
+        break;
+      case "cahillkeyes":
+        projection = d3
+          .geoCahillKeyes()
+          .fitExtent([[10, 2], [683, 421]], { type: "Sphere" });
+        break;
       case "lee":
         projection = d3
           .geoTetrahedralLee()
