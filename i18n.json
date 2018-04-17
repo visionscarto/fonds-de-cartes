@@ -61,11 +61,9 @@
     "waterman": "Projection: Waterman modified!",
     "timesus": "Projection “Times” centered on the United States.",
     "projectiondefault": "Projection: %p"
-  }
-}
-{
+  },
   "it": {
-    "credits1": "Contorni: Natural Earth, modificato da Visionscarto. Software : D3.js",
+    "credits1": "Contorni: Natural Earth, modificato da Visionscarto. Software: D3.js",
     "credits2": "Gratuito e libero per ogni uso.",
     "credits3": "Amiamo le mappe, condividiamole! contact@visionscarto.net",
     "bertin1953": "Proiezione creata da Philippe Rivière a partire da una proiezione di Jacques Bertin (1953).",
@@ -84,4 +82,5 @@
     "waterman": "Proiezione di Waterman modificata!",
     "timesus": "Proiezione “Times” centrata sugli Stati Uniti d'America.",
     "projectiondefault": "Proiezione %p"
-},
+  }
+}
