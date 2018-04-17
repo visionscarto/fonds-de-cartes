@@ -63,3 +63,25 @@
     "projectiondefault": "Projection: %p"
   }
 }
+{
+  "it": {
+    "credits1": "Contorni: Natural Earth, modificato da Visionscarto. Software : D3.js",
+    "credits2": "Gratuito e libero per ogni uso.",
+    "credits3": "Amiamo le mappe, condividiamole! contact@visionscarto.net",
+    "bertin1953": "Proiezione creata da Philippe Rivière a partire da una proiezione di Jacques Bertin (1953).",
+    "equirectangular": "Proiezione piatta quadrata (equirettangolare), attribuita a Marinus de Tyr (100 d.C.).",
+    "airocean": "Proiezione Airocean di Buckminster Fuller (1954).",
+    "cahillkeyes": "Proiezione di Cahill-Keyes (1975).",
+    "arctic": "Proiezione azimutale equivalente.",
+    "antarctic": "Proiezione azimutale equivalente.",
+    "robinson": "Proiezione d’Arthur H. Robinson (1963).",
+    "larrivee": "Proiezione di Léo Larrivée (1988).",
+    "bottomley": "Proiezione di Henry Bottomley (2003).",
+    "winkel-tripel": "Proiezione d’Oswald Winkel, detta Winkel-Tripel (1921).",
+    "gall-peters": "Proiezione di James Gall (1855), resa popolare da Arno Peters.",
+    "gingery": "Proiezione creata da Jason Davies, a partire da una proiezione di Walter Gingery (1944).",
+    "berghaus": "Proiezione creata da Jason Davies ???, da partire da una proiezione di Xxxx Berghaus (xxxx).",
+    "waterman": "Proiezione di Waterman modificata!",
+    "timesus": "Proiezione “Times” centrata sugli Stati Uniti d'America.",
+    "projectiondefault": "Proiezione %p"
+},
