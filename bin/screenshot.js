@@ -23,7 +23,7 @@ if (!url) {
   await page.goto(url);
   await sleep(1000 * secs);
 
-  await page.screenshot({ path: dest + ".png" });
+  await page.screenshot({ path: dest + ".png", omitBackground: true });
   console.log("saving " + url + " at scale " + scale + " as " + dest + ".png");
 
   svg = (await page.waitForFunction(
