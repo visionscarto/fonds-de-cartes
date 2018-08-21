@@ -274,6 +274,7 @@ Promise.all(promises).then(function(v) {
       projection = d3
         .geoTetrahedralLee()
         .angle(-30)
+        .rotate(rotate)
         .fitExtent([[20, 15], [width - 20, height - 20]], { type: "Sphere" });
       projection.precision(0.1);
       delete projection.precision; // Lee n'accepte pas trop de precision sinon ses coins sont abimes
