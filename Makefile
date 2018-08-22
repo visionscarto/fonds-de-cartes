@@ -98,7 +98,7 @@ lee:
 	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=lee&graticule=1&antarctica=1&rotate=-30&orient=180&lang=$$LANG" "build/$$LANG/visionscarto-lee" 2
 
 leenorth:
-	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=lee&graticule=1&antarctica=1&rotate=30&roll=180&orient=180&lang=$$LANG" "build/$$LANG/visionscarto-leenorth" 2
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=lee&graticule=1&antarctica=1&rotate=-30&roll=180&orient=180&lang=$$LANG" "build/$$LANG/visionscarto-leenorth" 2
 
 optim: optim-svg optim-png ## optimize all images
 
