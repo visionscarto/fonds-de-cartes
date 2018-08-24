@@ -175,6 +175,12 @@ Promise.all(promises).then(function(v) {
         .translate([348, 475 / 2])
         .rotate(rotate);
       break;
+    case "equalearth":
+      projection = d3
+        .geoEqualEarth()
+        .fitExtent([[10, 2], [693-8, 400]], { type: "Sphere" })
+        .rotate([-10,0]);
+      break;
     case "arctic":
       projection = d3
         .geoAzimuthalEqualArea()
