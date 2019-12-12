@@ -4,11 +4,11 @@
 <head>
     <style>
         body {
-            background: transparent;
+            background: transparent; margin: 0; padding: 0px;
         }
     </style>
+	<title>Fonds de carte visionscarto</title>
 </head>
-<title>Fonds de carte visionscarto</title>
 
 <body>
 
@@ -16,6 +16,7 @@
     	xmlns="http://www.w3.org/2000/svg"
     	xmlns:xlink="http://www.w3.org/1999/xlink"
     	xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+    	viewBox="0 0 700 475" 
     >
         <defs>
             <style type="text/css">
@@ -282,7 +283,7 @@ Promise.all(promises).then(function(v) {
     case "imago":
       projection = d3
         .geoImago()
-        .fitExtent([[20, 15], [width - 20, height - 20]], { type: "Sphere" });
+        .fitExtent([[10, 15], [width - 10, height - 20]], { type: "Sphere" });
       projection.precision(0.1);
       break;
     case "goodeocean":
@@ -349,8 +350,7 @@ Promise.all(promises).then(function(v) {
 
   var svg = d3
     .select("svg")
-    .attr("width", width)
-    .attr("height", height);
+    .attr("viewBox", [0, 0, width, height]);
 
   var defs = svg.select("defs");
 
@@ -391,10 +391,10 @@ Promise.all(promises).then(function(v) {
     .call(svglayer, "background")
     .append("rect")
     .attr("class", "background")
-    .attr("x", 2)
-    .attr("y", 2)
-    .attr("width", width - 8)
-    .attr("height", height - 5);
+    .attr("x", 3)
+    .attr("y", 3)
+    .attr("width", width - 6)
+    .attr("height", height - 6);
 
   var world = svg.append("g").call(svglayer, "world");
 
@@ -766,10 +766,10 @@ Promise.all(promises).then(function(v) {
       .call(svglayer, "frame")
       .append("rect")
       .attr("class", "frame")
-      .attr("x", 2)
-      .attr("y", 2)
-      .attr("width", width - 8)
-      .attr("height", height - 5);
+      .attr("x", 3)
+      .attr("y", 3)
+      .attr("width", width - 6)
+      .attr("height", height - 6);
 
     var gtitre = sig.append("g").call(svglayer, "title");
     var size = 36;
