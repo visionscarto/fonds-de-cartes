@@ -1,75 +1,63 @@
-#! /usr/bin/env phantomjs
+#! /usr/bin/env node
 
 // PDF ou JPG ont une qualité inférieure
-var args = require('system').args,
-    url = args[1],
-    dest = args[2] || 'screenshot.png',
-    scale = eval(args[3]) || 1,
+const args = process.argv,
+    url = args[2],
+    dest = args[3] || 'screenshot',
+    scale = eval(args[4]) || 1,
     secs = 1;
+
 
 if (!url) {
     console.log(usage());
-    phantom.exit();
+    return;
 }
 
-var page = require('webpage').create();
+const fs = require("fs"),
+  puppeteer = require('puppeteer');
 
-// donner une hauteur importante pour forcer lazyload
-// page.viewportSize = { width: 1024, height: 2768 };
+
+(async function(){
 
 console.log('loading ' + url);
-page.open(url,
-    function () {
 
-        // scale the page 
-        // http://zecipriano.com/2014/10/screenshots-size-phantomjs/
-        page.evaluate(function (scale) {
-            // the scale of the content, 1 for normal, 2 for a kind of retina
-            document.body.style.webkitTransform = "scale(" + scale + ")";
-            document.body.style.webkitTransformOrigin = "0% 0%";
-            document.body.style.width = 100 / scale + "%";
+let svgCode = await screen(url, dest);
 
-        }, scale);
+// plantage sur les textures !
+svgCode = svgCode.replace(/(fill: )(#.....)( rgba\(.*?\))?;/g, '$1 url($2);')
+  .replace(/&nbsp;/g, ' ');
+svgCode = '<?xml version="1.0" encoding="utf-8"?>' + svgCode;
+saveas(svgCode, dest + ".svg");
 
+})();
 
-        // attendre 1seconde pour d3.legend()
-        console.log('sleeping for ' + secs + 's');
-        setTimeout(function () {
-            var a = page.evaluate(function() {
-              return document.all[0].outerHTML.match(/<svg[^]*?<\/svg>/gm)[0];
-            });
+// ----------------------------------
 
-            // match all SVGs and save them
-            var i = 0;
-            var u = a.replace(/<svg[^]*?<\/svg>/gm, function(svg) {
-                console.log('saving ' + url + ' at scale ' + scale + ' as ' + dest + '.svg');
+async function screen(url, path) {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  const width = 704, height = 483; // includes margins
+  await page.setViewport({width, height, deviceScaleFactor: scale});
+  await page.goto(url, {waitUntil: 'networkidle2'});
 
-                // plantage sur les textures !
-                svg = svg
-                .replace(/(fill: )(#.....)( rgba\(.*?\))?;/g, '$1 url($2);')
-                .replace(/&nbsp;/g, ' ');
-                saveas('<?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">' + svg, dest + (i>0 ? i : '') + '.svg');
-                i++;
-            });
+  await delay(1000);
+  await page.screenshot({path: path + ".png", omitBackground: true });
 
-            console.log('saving ' + url + ' at scale ' + scale + ' as ' + dest + '.png');
-            page.render(dest + '.png');
+  const svgCode = await page.evaluate(() => document.all[0].outerHTML.match(/<svg[^]*?<\/svg>/gm)[0]);
 
-            // console.log('saving ' + url + ' at scale ' + scale + ' as ' + dest + '.pdf');
-            // page.render(dest + '.pdf');
-            phantom.exit();
-
-        }, secs * 1000);
-
-    });
-
+  await browser.close();
+  
+  return svgCode;
+}
 
 function saveas(content, path) {
-    var fs = require('fs');
-    fs.write(path, content, 'w');
+    fs.writeFileSync(path, content);
 }
 
 function usage() {
-    return args[0] + '[url] [dest.png]';
+    return `${args[0]} ${args[1]} [url] [dest.png]`;
 }
 
+async function delay (duration) {
+  return new Promise(resolve => setTimeout(resolve, duration));
+}
