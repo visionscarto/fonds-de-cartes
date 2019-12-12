@@ -5,9 +5,9 @@ all: init tag fonds-bizarres fonds-utiles fonds-tests fonds ## data & fonds de c
 tag:
 	gstat  -c '%y' fond.html > build/tag.txt
 
-fonds: arctic antarctic  airocean bertin1953 cahillkeyes robinson winkel-tripel optim ## fonds de cartes standards
+fonds: arctic antarctic  airocean bertin1953 cahillkeyes equalearth winkel-tripel optim ## fonds de cartes standards
 
-fonds-bizarres: bottomley gallpeters larrivee timesus ## fonds de cartes bizarres
+fonds-bizarres: bottomley gallpeters larrivee timesus robinson ## fonds de cartes bizarres
 
 fonds-tests: gingery cox lee leenorth ## fonds de cartes en test
 
@@ -57,9 +57,6 @@ antarctic: ## projection azimutale équivalente nord
 bertin1953: ## projection bertin 1953
 	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=bertin1953&lang=$$LANG" "build/$$LANG/visionscarto-bertin1953" 2
 
-robinson: ## projection robinson
-	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=robinson&lang=$$LANG" "build/$$LANG/visionscarto-robinson" 2
-
 winkel-tripel: ## projection winkel-tripel
 	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=winkel-tripel&lang=$$LANG" "build/$$LANG/visionscarto-winkel-tripel" 2
 
@@ -68,6 +65,15 @@ airocean: ## projection airocean de Buckminster Fuller
 
 cahillkeyes: ## projection de Cahill-Keyes
 	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=cahillkeyes&graticule=1&antarctica=1&lang=$$LANG" "build/$$LANG/visionscarto-cahillkeyes" 2
+
+equalearth: ## projection Equal Earth (2018)
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=equalearth&graticule=1&antarctica=1&lang=$$LANG"  "build/$$LANG/visionscarto-equalearth" 2 
+
+## obsolete remplacee par equalearth (??)
+robinson: ## projection robinson
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=robinson&lang=$$LANG" "build/$$LANG/visionscarto-robinson" 2
+
+
 
 ### PROJECTIONS UTILES
 
@@ -95,10 +101,10 @@ cox:
 	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=Cox&graticule=1&lang=$$LANG" "build/$$LANG/visionscarto-cox" 2
 
 lee:
-	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=PolyhedralLee&graticule=1&antarctica=1&rotate=-30&orient=180&lang=$$LANG" "build/$$LANG/visionscarto-lee" 2
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=lee&graticule=1&antarctica=1&rotate=-30&orient=180&lang=$$LANG" "build/$$LANG/visionscarto-lee" 2
 
 leenorth:
-	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=PolyhedralLee&graticule=1&antarctica=1&rotate=30&roll=180&orient=180&lang=$$LANG" "build/$$LANG/visionscarto-leenorth" 2
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=lee&graticule=1&antarctica=1&rotate=-30&roll=180&orient=180&lang=$$LANG" "build/$$LANG/visionscarto-leenorth" 2
 
 imago:
 	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=imago&graticule=1&antarctica=1&lang=$$LANG" "build/$$LANG/visionscarto-imago" 2

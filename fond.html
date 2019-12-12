@@ -135,8 +135,7 @@ function param(x, def) {
   return def;
 }
 
-var topo = "data/countries_110m.json",
-  projection = null,
+var projection = null,
   pj = param("projection", "robinson"),
   rotate = [+param("rotate", -10.23), +param("pitch", 0), +param("roll", 0)],
   show_graticule = param("graticule", false),
@@ -145,7 +144,8 @@ var topo = "data/countries_110m.json",
   clipPath = param("clip") ? "url(#clip)" : null;
 
 var promises = [];
-promises.push(d3.json(topo));
+promises.push(d3.json("./data/110m.json"));
+promises.push(d3.tsv("./data/110m.tsv"));
 promises.push(d3.json("./data/disputed.geojson"));
 promises.push(d3.csv("./data/capitals.csv"));
 promises.push(d3.csv("./data/island-nations.csv"));
@@ -157,14 +157,7 @@ promises.push(d3.json("./i18n.json"));
 if (param("feature", false)) promises.push(d3.json("/maps/seabed/eez.topo.json"));
 
 Promise.all(promises).then(function(v) {
-  var wjson = v[0],
-    disputed = v[1],
-    capitals = v[2],
-    islands = v[3],
-    pop = v[4],
-    tag = v[5],
-    i18n = v[6],
-    feature = v[7];
+  var [wjson, tsv, disputed, capitals, islands, pop, tag, i18n, feature] = v;
 
   switch (pj) {
     case "bertin1953":
@@ -504,7 +497,7 @@ Promise.all(promises).then(function(v) {
       return "country " + class_iso_a3(d.properties);
     })
     .call(svglayer, function(d) {
-      return (class_iso_a3(d.properties) + " " + d.properties.name).replace(/ /g, "_");
+      return (class_iso_a3(d.properties) + " " + (d.properties['name_'+param("lang")] || d.properties.name)).replace(/ /g, "_");
     })
     .append("path")
     .attr("d", path);
