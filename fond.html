@@ -381,7 +381,7 @@ Promise.all(promises).then(function(v) {
   defs
     .append("path")
     .datum({ type: "Sphere" })
-    .attr("id", "sphere")
+    .attr("id", "sphereClip")
     .attr("d", path);
 
   if (clipPath)
@@ -389,7 +389,7 @@ Promise.all(promises).then(function(v) {
       .append("clipPath")
       .attr("id", "clip")
       .append("use")
-      .attr("xlink:href", "#sphere");
+      .attr("xlink:href", "#sphereClip");
 
   var bg = svg
     .append("g")
@@ -456,7 +456,7 @@ Promise.all(promises).then(function(v) {
     .append("use")
     .attr("class", "sphere")
     .call(svglayer, "sphere")
-    .attr("xlink:href", "#sphere");
+    .attr("xlink:href", "#sphereClip");
 
   world
     .append("g")
