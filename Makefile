@@ -101,10 +101,10 @@ cox:
 	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=Cox&graticule=1&lang=$$LANG" "build/$$LANG/visionscarto-cox" 2
 
 lee:
-	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=lee&graticule=1&antarctica=1&rotate=-30&orient=180&lang=$$LANG" "build/$$LANG/visionscarto-lee" 2
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=lee&graticule=1&antarctica=1&rotate=-30&angle=-30&lang=$$LANG" "build/$$LANG/visionscarto-lee" 2
 
 leenorth:
-	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=lee&graticule=1&antarctica=1&rotate=-30&roll=180&orient=180&lang=$$LANG" "build/$$LANG/visionscarto-leenorth" 2
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=lee&graticule=1&antarctica=1&rotate=-30&roll=180&angle=-30&lang=$$LANG" "build/$$LANG/visionscarto-leenorth" 2
 
 imago:
 	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=imago&graticule=1&antarctica=1&lang=$$LANG" "build/$$LANG/visionscarto-imago" 2

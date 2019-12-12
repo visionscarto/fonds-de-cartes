@@ -159,6 +159,13 @@ if (param("feature", false)) promises.push(d3.json("/maps/seabed/eez.topo.json")
 Promise.all(promises).then(function(v) {
   var [wjson, tsv, disputed, capitals, islands, pop, tag, i18n, feature] = v;
 
+  // join tsv
+  const m = {};
+  tsv.forEach(e => m[e.id] = e);
+  wjson.objects.countries.geometries.forEach(c => {
+    c.properties = m[c.id];
+  });
+
   switch (pj) {
     case "bertin1953":
       projection = d3
@@ -277,7 +284,7 @@ Promise.all(promises).then(function(v) {
     case "lee":
       projection = d3
         .geoTetrahedralLee()
-        .angle(-30)
+        .angle(angle)
         .rotate(rotate)
         .fitExtent([[20, 15], [width - 20, height - 20]], { type: "Sphere" });
       projection.precision(0.1);
@@ -491,7 +498,7 @@ Promise.all(promises).then(function(v) {
       );
     });
 
-  var randomcolor = d3.scaleOrdinal(d3.schemeCategory20b);
+  var randomcolor = d3.scaleOrdinal(d3.schemeCategory10);
   world
     .append("g")
     .attr("clip-path", clipPath)
