@@ -279,6 +279,12 @@ Promise.all(promises).then(function(v) {
       // todo : revoir le cadre et déplacer la signature
       // todo : bien gérer la sphere
       break;
+    case "imago":
+      projection = d3
+        .geoImago()
+        .fitExtent([[20, 15], [width - 20, height - 20]], { type: "Sphere" });
+      projection.precision(0.1);
+      break;
     case "goodeocean":
       var lobes = [
         [

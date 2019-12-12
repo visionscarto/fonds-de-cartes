@@ -100,6 +100,9 @@ lee:
 leenorth:
 	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=PolyhedralLee&graticule=1&antarctica=1&rotate=30&roll=180&orient=180&lang=$$LANG" "build/$$LANG/visionscarto-leenorth" 2
 
+imago:
+	./bin/screenshot.js "http://localhost/maps/fonds-de-cartes/fond.html?projection=imago&graticule=1&antarctica=1&lang=$$LANG" "build/$$LANG/visionscarto-imago" 2
+
 optim: optim-svg optim-png ## optimize all images
 
 optim-png: ## optimize PNG

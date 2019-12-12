@@ -18,6 +18,7 @@
     "berghaus": "Projection créée par Jason Davies ???, d’après Xxxx Berghaus (xxxx).",
     "waterman": "Projection de Waterman modifiée !",
     "timesus": "Projection “Times” centrée sur les États-Unis.",
+    "imago": "Projection “Imago” créée par Justin Kunimune (2017) et inspirée par Hajime Narukawa (Authagraph, 1999).",
     "projectiondefault": "Projection %p"
   },
   "es": {
@@ -39,6 +40,7 @@
     "berghaus": "Proyección creada por Jason Davies ???, en base al trabajo de Xxxx Berghaus (xxxx).",
     "waterman": "Proyección de Waterman ¡modificada!",
     "timesus": "Proyección “Times” centrada sobre los Estados Unidos.",
+    "imago": "Proyección “Imago” creada por Justin Kunimune (2017) e inspirada por Hajime Narukawa (Authagraph, 1999).",
     "projectiondefault": "Proyección %p"
   },
   "en": {
@@ -60,6 +62,7 @@
     "berghaus": "Projection created by Jason Davies ???, after Xxxx Berghaus (xxxx).",
     "waterman": "Projection: Waterman modified!",
     "timesus": "Projection “Times” centered on the United States.",
+    "imago": "Projection “Imago” engineered by Justin Kunimune (2017) and inspired by Hajime Narukawa’s AuthaGraph design (1999).",
     "projectiondefault": "Projection: %p"
   },
   "it": {
@@ -81,6 +84,7 @@
     "berghaus": "Proiezione creata da Jason Davies ???, da partire da una proiezione di Xxxx Berghaus (xxxx).",
     "waterman": "Proiezione di Waterman modificata!",
     "timesus": "Proiezione “Times” centrata sugli Stati Uniti d'America.",
+    "imago": "Proiezione “Imago” creata da Justin Kunimune (2017) e ispirata a Hajime Narukawa (Authagraph, 1999).",
     "projectiondefault": "Proiezione %p"
   }
 }
