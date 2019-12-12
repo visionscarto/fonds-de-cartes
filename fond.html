@@ -477,7 +477,7 @@ Promise.all(promises).then(function(v) {
     .attr("class", "continent")
     .attr("clip-path", clipPath)
     .call(svglayer, function(d) {
-      return d;
+      return d.replace(/ /g, "_");
     })
     .append("path")
     .attr("d", function(d) {
@@ -504,7 +504,7 @@ Promise.all(promises).then(function(v) {
       return "country " + class_iso_a3(d.properties);
     })
     .call(svglayer, function(d) {
-      return class_iso_a3(d.properties) + " " + d.properties.name;
+      return (class_iso_a3(d.properties) + " " + d.properties.name).replace(/ /g, "_");
     })
     .append("path")
     .attr("d", path);
@@ -521,7 +521,7 @@ Promise.all(promises).then(function(v) {
       return "disputed";
     })
     .call(svglayer, function(d) {
-      return d.properties.name;
+      return d.properties.name.replace(/ /g, "_");
     })
     .append("path")
     .attr("d", path);
@@ -600,7 +600,7 @@ Promise.all(promises).then(function(v) {
     .enter()
     .append("circle")
     .call(svglayer, function(d) {
-      return d.id + " " + d.name;
+      return (d.id + " " + d.name).replace(/ /g, "_");
     })
     .attr("cx", function(d) {
       return d.x;
@@ -635,7 +635,7 @@ Promise.all(promises).then(function(v) {
     .enter()
     .append("g")
     .call(svglayer, function(d) {
-      return d.id + " " + d.capital;
+      return (d.id + " " + d.capital).replace(/ /g, "_");
     })
     .attr("class", function(d) {
       return "capital " + d.id;
@@ -695,7 +695,7 @@ Promise.all(promises).then(function(v) {
       return pop_scale(d.pop);
     })
     .call(svglayer, function(d) {
-      return d.properties.GU_A3 + " " + d.properties.NAME;
+      return (d.properties.GU_A3 + " " + d.properties.NAME).replace(/ /g, "_");
     });
 
   // GDP/PIB
@@ -752,7 +752,7 @@ Promise.all(promises).then(function(v) {
       return "translate(" + x + "," + x + ")";
     })
     .call(svglayer, function(d) {
-      return d.properties.GU_A3 + " " + d.properties.NAME;
+      return (d.properties.GU_A3 + " " + d.properties.NAME).replace(/ /g, "_");
     });
 
   function _(t) {
